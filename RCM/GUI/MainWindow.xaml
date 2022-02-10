@@ -1,0 +1,91 @@
+﻿<Window x:Class="RCM.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="NALABS" WindowStartupLocation="CenterScreen" Height="400" Width="700" WindowStyle="SingleBorderWindow">
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="35*"/>
+            <ColumnDefinition Width="659*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="22"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" BorderBrush="AliceBlue" BorderThickness="0 0 0 1" Background="AliceBlue" Grid.ColumnSpan="2" Margin="0,0,-0.4,0.4" >
+            <Menu Padding="0" IsMainMenu="True" VerticalAlignment="Center" Background="Transparent">
+                <MenuItem Header="_File" Name="FileMenu">
+                    <MenuItem Header="_Open" Name="OpenMenu" Click="OpenMenu_Click"/>
+                    <MenuItem Header="_Save" Name="SaveMenu" Click="SaveMenu_Click" />
+                    <MenuItem Header="_SaveAs" Name="SaveAs" Click="SaveAs_Click"/>
+                    <MenuItem Header="_Exit" Name="Exit" Click="Exit_Click" />
+                </MenuItem>
+                <MenuItem Header="_Edit" Name="EditMenu" >
+                    <MenuItem Header="_Settings" Name="SettingsMenu" Click="SettingsMenu_Click"/>
+                </MenuItem>
+                <MenuItem Header="_View" Name="ViewMenu">
+                    <MenuItem Header="_Scatter chart" Name="ScatterChart" Click="ScatterChart_Click"/>
+                </MenuItem>
+            </Menu>
+        </Border>
+
+        <!--<ListBox Grid.Row="1" x:Name="Requirements"  VerticalAlignment="Stretch" SelectionMode="Extended" HorizontalAlignment="Stretch" Margin="5">
+           
+        </ListBox>-->
+        <!--<ListView Margin="20" Grid.Row="1"  Name="Requirements">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Id"  Width="100" DisplayMemberBinding="{Binding Id}"></GridViewColumn>
+                    <GridViewColumn Header="Text" Width="250" DisplayMemberBinding="{Binding Text}"></GridViewColumn>
+                    <GridViewColumn Header="Number of words" Width="100" DisplayMemberBinding="{Binding WordNumber}"></GridViewColumn>
+                    <GridViewColumn Header="Number of Conjuctions" Width="100" DisplayMemberBinding="{Binding Conjuctions}"></GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>-->
+        <DataGrid Name="Requirements" AutoGenerateColumns="False"  ItemsSource="{Binding}" VirtualizingStackPanel.VirtualizationMode="Standard" ScrollViewer.PanningRatio="0.3" Grid.ColumnSpan="2" Margin="0,22,-0.4,0.4" Grid.RowSpan="2" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Width="100" Binding="{Binding Id}" IsReadOnly="True">
+                </DataGridTextColumn>
+                <DataGridTemplateColumn  Header="Text" Width="300" IsReadOnly="True"   >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate >
+                            <RichTextBox>
+                                <FlowDocument>
+                                    <Paragraph>
+                                        <Run Text="{Binding Text}" SourceUpdated="Run_SourceUpdated" TextInput="Run_TextInput" Loaded="Run_Loaded" />
+                                    </Paragraph>
+                                </FlowDocument>
+                            </RichTextBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <!--Binding="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, BindsDirectlyToSource=True}"-->
+                <DataGridTextColumn Header="NW" IsReadOnly="True" Width="60" Binding="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, Path=WordNumber, BindsDirectlyToSource=True}" ></DataGridTextColumn>
+                <DataGridTextColumn Header="NC" TextElement.Foreground="BlueViolet" IsReadOnly="True" Width="60" Binding="{Binding Conjunctions, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, BindsDirectlyToSource=True}"></DataGridTextColumn>
+                <DataGridTextColumn Header="NV" TextElement.Foreground="Blue" IsReadOnly="True" Width="60" Binding="{Binding VaguePhrases, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, BindsDirectlyToSource=True}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Optionality" TextElement.Foreground="Aqua" IsReadOnly="True" Width="60" Binding="{Binding Optionality, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, BindsDirectlyToSource=True}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Subjectivity" TextElement.Foreground="DarkSalmon" IsReadOnly="True" Width="60" Binding="{Binding Subjectivity, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, BindsDirectlyToSource=True}"></DataGridTextColumn>
+                <DataGridTextColumn Header="NR" TextElement.Foreground="Bisque" IsReadOnly="True" Width="60" Binding="{Binding References, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, BindsDirectlyToSource=True}"></DataGridTextColumn>
+                <DataGridTextColumn Header="NR2" TextElement.Foreground="Beige" IsReadOnly="True" Width="60" Binding="{Binding References2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, BindsDirectlyToSource=True}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Weakness" TextElement.Foreground="Brown" IsReadOnly="True" Width="60" Binding="{Binding Weakness, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, BindsDirectlyToSource=True}"></DataGridTextColumn>
+                <DataGridTextColumn  Header="Imperatives" TextElement.Foreground="Red"  IsReadOnly="True" Width="60" Binding="{Binding Imperatives,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, BindsDirectlyToSource=True}"></DataGridTextColumn>
+                <DataGridTextColumn  Header="Imperatives2" TextElement.Foreground="DarkSeaGreen" IsReadOnly="True" Width="60" Binding="{Binding Imperatives2,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, BindsDirectlyToSource=True}"></DataGridTextColumn>
+                <DataGridTextColumn  Header="Continuances" TextElement.Foreground="Crimson"   IsReadOnly="True" Width="60" Binding="{Binding Continuances,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, BindsDirectlyToSource=True}"></DataGridTextColumn>
+                <DataGridTextColumn   Header="ARI" IsReadOnly="True" Width="60" Binding="{Binding ARI, StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, BindsDirectlyToSource=True}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <!--<FlowDocumentReader Name="Requirements" Grid.Row="1">            
+        </FlowDocumentReader>-->
+        <!--<DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <RichTextBox Width="350">
+                        <FlowDocument>
+                            <Paragraph>
+                                <Run Text="{Binding Text}"/>
+                            </Paragraph>
+                        </FlowDocument>
+                    </RichTextBox>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>-->
+
+    </Grid>
+</Window>

@@ -1,0 +1,43 @@
+﻿<Window x:Class="RCM.Splash"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        WindowStyle="None" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="NoResize" AllowsTransparency="True" 
+        WindowState="Normal">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" Color="DarkBlue" Opacity="0.5" Direction="-45" ShadowDepth="5" RenderingBias="Quality"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Background="#DDFFFFFF" Height="400" Width="500">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="30" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="30" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="40*" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="1" Grid.Row="0" TextWrapping="Wrap" FontFamily="Rockwell" FontSize="60" VerticalAlignment="Bottom" Text="NALABS"/>
+        <TextBlock Grid.Column="1" Grid.Row="2" TextWrapping="Wrap"  FontSize="20" VerticalAlignment="Bottom"><Run Text="Natural Language Bad Smell"/><Run Text="s"/><Run Text=" DETECTOR"/></TextBlock>
+
+        <TextBlock Grid.Column="1" Grid.Row="3" Name="Status" VerticalAlignment="Bottom">
+                Status
+        </TextBlock>
+        <ProgressBar Grid.Column="1" Grid.Row="4" Name="Progress" Background="#00000000" Value="0"/>
+        </Grid>
+    <Window.Background>
+        <LinearGradientBrush EndPoint="1,1" StartPoint="0,0">
+            <GradientStop Color="Brown" Offset="0.45"/>
+            <GradientStop Color="White"  Offset="1" />
+        </LinearGradientBrush>
+    </Window.Background>
+</Window>
