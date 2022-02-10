@@ -37,4 +37,4 @@ The latest release of the NALABS executable can be downloaded from GitHub on the
 NALABS has been funded by Bombardier Transportation through a thesis project, by the European Union’s Horizon 2020 research and innovation program under grant agreement No. 957212 and by the Swedish Innovation Agency (Vinnova) through the XIVT project.
 
 # License
-NALABS's source code is released under the LGPL (v3) license
+NALABS's source code is released under the MIT license
