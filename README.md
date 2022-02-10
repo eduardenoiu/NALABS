@@ -1,6 +1,3 @@
-# nalabs
-NALABS is a requirement quality checker for natural language requirements. It uses a set of bad smells to indicate problematic requirements. The tool was developed by Kostadin Rajkovic in collaboration with Eduard Paul Enoiu. 
-
 # NALABS: Bad smells detector and complexity measurer for natural language requirements
 ![image](https://user-images.githubusercontent.com/7644735/145826101-d9ab2ed6-022c-4468-ae0a-7ef4880b05c1.png)
 
