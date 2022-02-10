@@ -20,7 +20,7 @@ and others...
 More details about NALABS can be found in  http://www.diva-portal.org/smash/record.jsf?pid=diva2%3A1332337&dswid=9711 
 
 # Funding
-NALABS has been funded by Bombardier Transportation through a thesis project, by the European Union’s Horizon 2020 research and innovation program under grant agreement No. 957212 also from the Swedish Innovation Agency (Vinnova) through the XIVT project.
+NALABS has been funded by Bombardier Transportation through a thesis project, by the European Union’s Horizon 2020 research and innovation program under grant agreement No. 957212 and by the Swedish Innovation Agency (Vinnova) through the XIVT project.
 
 # License
 NALABS's source code is released under the LGPL (v3) license
