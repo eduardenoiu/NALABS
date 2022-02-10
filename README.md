@@ -16,8 +16,16 @@
 10. Continuances (CT)
 and others...
 
-#  Documentation
+#  Documentation, Download and Install 
 More details about NALABS can be found in  http://www.diva-portal.org/smash/record.jsf?pid=diva2%3A1332337&dswid=9711 
+
+NALABS is composed of two main components:
+
+GUI: the main program executable
+Metrics: these are used as proxy for bad smells
+
+The latest release of the NALABS executable can be downloaded from GitHub on the releases page: https://github.com/eduardenoiu/nalabs_release Alternatively, it can be built from source code. You can use different methods to build an application: the Visual Studio IDE and the MSBuild command-line tools. 
+
 
 # Funding
 NALABS has been funded by Bombardier Transportation through a thesis project, by the European Union’s Horizon 2020 research and innovation program under grant agreement No. 957212 and by the Swedish Innovation Agency (Vinnova) through the XIVT project.
