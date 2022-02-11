@@ -21,7 +21,7 @@ More details about NALABS can be found in  http://www.diva-portal.org/smash/reco
 
 NALABS is composed of two main components: the GUI as the main program executable and the metrics used as proxy for bad smells. 
 
-The latest release of the NALABS executable can be downloaded from GitHub on the releases page: https://github.com/eduardenoiu/nalabs_release Alternatively, it can be built from source code. You can use different methods to build an application: the Visual Studio IDE and the MSBuild command-line tools. 
+The latest release of the NALABS executable can be downloaded from GitHub on the releases page. Alternatively, it can be built from source code. You can use different methods to build an application: the Visual Studio IDE and the MSBuild command-line tools. 
 
 Add the package Microsoft.Office.Interop.Excel using the NuGet Package Manager. 
 
