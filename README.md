@@ -23,6 +23,8 @@ NALABS is composed of two main components: the GUI as the main program executabl
 
 The latest release of the NALABS executable can be downloaded from GitHub on the releases page: https://github.com/eduardenoiu/nalabs_release Alternatively, it can be built from source code. You can use different methods to build an application: the Visual Studio IDE and the MSBuild command-line tools. 
 
+Add the package Microsoft.Office.Interop.Excel using the NuGet Package Manager. 
+
 
 #  Using NALABS
  First change some settings. Choose Edit/Settings menu tab. In the Excel view you should choose the REQ ID and Text column in the requirement excel document.
@@ -34,7 +36,7 @@ The latest release of the NALABS executable can be downloaded from GitHub on the
 
 
 # Funding
-NALABS has been funded by Bombardier Transportation through a thesis project, by the European Union’s Horizon 2020 research and innovation program under grant agreement No. 957212 and by the Swedish Innovation Agency (Vinnova) through the XIVT project.
+NALABS has been funded by Bombardier Transportation through a thesis project, by the European Union’s Horizon 2020 research and innovation program under grant agreement No. 957212 and by the Swedish Innovation Agency (Vinnova) through the XIVT project. This work was partially funded from the Electronic Component Systems for European Leadership Joint Undertaking under grant agreement No. 737494 and The Swedish Innovation Agency, Vinnova (MegaM@Rt2). 
 
 # License
 NALABS's source code is released under the MIT license
