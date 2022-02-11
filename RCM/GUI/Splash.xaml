@@ -26,8 +26,12 @@
             <RowDefinition Height="20" />
             <RowDefinition Height="40*" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Column="1" Grid.Row="0" TextWrapping="Wrap" FontFamily="Rockwell" FontSize="60" VerticalAlignment="Bottom" Text="NALABS"/>
-        <TextBlock Grid.Column="1" Grid.Row="2" TextWrapping="Wrap"  FontSize="20" VerticalAlignment="Bottom"><Run Text="Natural Language Bad Smell"/><Run Text="s"/><Run Text=" DETECTOR"/></TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="0" TextWrapping="Wrap" FontFamily="Rockwell" FontSize="60" VerticalAlignment="Bottom">
+                NALABS
+        </TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="2" TextWrapping="Wrap"  FontSize="20" VerticalAlignment="Bottom">
+                Natural Language Bad Smells Detector
+        </TextBlock>
 
         <TextBlock Grid.Column="1" Grid.Row="3" Name="Status" VerticalAlignment="Bottom">
                 Status
