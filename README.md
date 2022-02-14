@@ -5,7 +5,9 @@
 
 NALABS: Detecting Bad Smells in Natural Language Requirements and Test Specifications, Kostadin Rajkovic, Eduard Paul Enoiu
 Report - MRTC, Mälardalen Real-Time Research Centre, Mälardalen University ISRN: MDH-MRTC-340/2022-1-SE
+
 [Report] (http://www.es.mdh.se/publications/6382-NALABS__Detecting_Bad_Smells_in_Natural_Language_Requirements_and_Test_Specifications)
+
 [ArXiv] (https://arxiv.org/abs/2202.05641)
 
 # Summary of Measures Used in NALABS
