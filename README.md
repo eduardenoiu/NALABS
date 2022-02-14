@@ -1,6 +1,12 @@
 # NALABS: NAtural LAnguage Bad Smells detector
 ![image](https://user-images.githubusercontent.com/7644735/145826101-d9ab2ed6-022c-4468-ae0a-7ef4880b05c1.png)
 
+# Reference 
+
+NALABS: Detecting Bad Smells in Natural Language Requirements and Test Specifications, Kostadin Rajkovic, Eduard Paul Enoiu
+Report - MRTC, Mälardalen Real-Time Research Centre, Mälardalen University ISRN: MDH-MRTC-340/2022-1-SE
+[Report] (http://www.es.mdh.se/publications/6382-NALABS__Detecting_Bad_Smells_in_Natural_Language_Requirements_and_Test_Specifications)
+[ArXiv] (https://arxiv.org/abs/2202.05641)
 
 # Summary of Measures Used in NALABS
 
@@ -32,7 +38,6 @@ Add the package Microsoft.Office.Interop.Excel using the NuGet Package Manager.
  To open a requirement excel file choose the File/Open menu tab
  
  Known bug: When opening a new excel document, please remove the Settings.xml in the Settings folder located in the same place as the executable. This needs to be done since the program might crash.
-
 
 
 # Funding
