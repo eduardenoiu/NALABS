@@ -14,6 +14,10 @@ NALABS performs the following analysis on each requirement:
 
 ## Dependencies
 
+Running `pip install -r requirements.txt` should install everything that is needed. 
+
+For a manual installation, the following packages are required
+
 - pandas
 - openpyxl
 - spacy
@@ -21,19 +25,17 @@ NALABS performs the following analysis on each requirement:
 - textblob
 
 Install the dependencies using the following command:
-
-pip install pandas openpyxl spacy textstat textblob
+`pip install pandas openpyxl spacy textstat textblob`
 
 ### Spacy
 Spacy relies on explicitly installed language models. If the following error appears
 ```OSError: [E050] Can't find model 'en_core_web_sm'. It doesn't seem to be a Python package or a valid path to a data directory.``` then the model needs to be downloaded. 
 
-Run the command `python -m spacy download en_core_web_sm` to download it.
-
+Running the command `python -m spacy download en_core_web_sm` to fix the issue.
 
 ## Usage
 
-1. Open the `nalabs.py` file in a text editor or an IDE.
+1. Open the `NALABS.py` file in a text editor or an IDE.
 2. Run the script using the following command:
 
 ```bash
@@ -41,7 +43,7 @@ python NALABS.py <input_file> <id_column> <text_column> <output_file>
 ```
 Note: if less than four arguments are passed to the script, it will assume that default arguments shall be used.
 Defaults:
-input_file = 'requirements.xlsx'
-id_column = 'ID'
-text_column = 'Requirement'
-output_file = 'bad_smells.xlsx'
+- input_file = 'requirements.xlsx'
+- id_column = 'ID' (The column header for column containing Requirement IDs)
+- text_column = 'Requirement' (The column header for column containing requirement text)
+- output_file = 'bad_smells.xlsx' 
