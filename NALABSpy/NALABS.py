@@ -1,24 +1,12 @@
 import pandas as pd
-import re
-import spacy
-from spacy.tokens import Doc
-from textstat import flesch_reading_ease
-from textblob import TextBlob
 import sys
+
 
 DEFAULT_OUTPUT_FILE_PATH = 'bad_smells.xlsx'
 DEFAULT_INPUT_FILE_PATH = 'requirements.xlsx'
 
-DEFAULT_MINIMUM_REQUIRED_READING_SCORE = 30
-DEFAULT_MAXIMUM_ALLOWED_SUBJECTIVITY_SCORE = 0.5
-DEFAULT_MAXIMUM_ALLOWED_SMELLS = 2
-
+from nalabs_rules import apply_all_rules
 def main():
-    # Load spaCy's English language model
-    nlp = spacy.load('en_core_web_sm')
-
-    # Register 'subjectivity' extension attribute
-    Doc.set_extension('subjectivity', default=0.0)
 
     def read_requirements_from_excel(file_path, id_column, text_column):
         df = pd.read_excel(file_path)
@@ -31,58 +19,21 @@ def main():
 
     def detect_bad_smells(requirements):
         bad_smells = []
-        ambiguous_words = ['may', 'could', 'has to', 'have to', 'might', 'will', 'should have', 'must have',
-                           'all the other', 'all other',
-                           'based on', 'some', 'appropriate', 'as a', 'as an', 'a minimum', 'up to', 'adequate',
-                           'as applicable', 'be able to',
-                           'be capable', 'but not limited to', 'capability of', 'capability to', 'effective',
-                           'normal']  # Add your list of ambiguous words here
-        requirement_keywords = ['shall', 'must', 'should', 'will', 'requires', 'necessitates', 'needs to',
-                                'is required to']  # Add your list of requirement words here
-        security_keywords = ['security', 'secure', 'confidentiality', 'integrity', 'availability', 'authentication',
-                             'authorization',
-                             'encryption', 'access control', 'audit', 'firewall', 'intrusion detection',
-                             'vulnerability', 'patching',
-                             'secure communication', 'privacy', 'compliance', 'risk assessment', 'incident response',
-                             'disaster recovery',
-                             'secure coding']  # Add your list of security words here
 
         for req_id, requirement in requirements:
-            if isinstance(requirement, str):
-                bad_smell_entry = {
-                    'ID': req_id,
-                    'Requirement': requirement
-                }
+            if not isinstance(requirement, str):
+                if verbose_mode:
+                    print("Skipping requirement that does not appear to be a string: " + requirement)
+                continue
+            bad_smell_entry = {
+                'ID': req_id,
+                'Requirement': requirement
+            }
+            BAD_SMELL_DEFAULT_FIELD_AMOUNT = len(bad_smell_entry)
+            bad_smell_entry = apply_all_rules(requirement, bad_smell_entry)
 
-                # Rule 1: Check for ambiguous words using spaCy for part-of-speech tagging
-                doc = nlp(requirement)
-                ambiguous_word_matches = [token.text for token in doc if token.text.lower() in ambiguous_words]
-                if ambiguous_word_matches:
-                    bad_smell_entry['Ambiguity Detected'] = ', '.join(ambiguous_word_matches)
-
-                # Rule 2: Check for low readability (Flesch Reading Ease score)
-                reading_ease_score = flesch_reading_ease(requirement)
-                if reading_ease_score < DEFAULT_MINIMUM_REQUIRED_READING_SCORE:  # Adjust the threshold as needed
-                    bad_smell_entry['Low Readability'] = f'Flesch Reading Ease: {reading_ease_score:.2f}'
-
-                # Rule 3: Check for subjectivity 
-                blob = TextBlob(requirement)
-                subjectivity_score = blob.sentiment.subjectivity
-                if subjectivity_score > DEFAULT_MAXIMUM_ALLOWED_SUBJECTIVITY_SCORE:  # Adjust the threshold as needed
-                    bad_smell_entry['Subjectivity Detected'] = f'Subjectivity Score: {subjectivity_score:.2f}'
-
-                # Rule 4: Check if requirement text contains requirement keywords
-                has_requirement_keywords = any(keyword in requirement.lower() for keyword in requirement_keywords)
-                if not has_requirement_keywords:
-                    bad_smell_entry['Not a Requirement'] = True
-
-                # Rule 5: Check if requirement is security-related
-                is_security_related = any(keyword in requirement.lower() for keyword in security_keywords)
-                if is_security_related:
-                    bad_smell_entry['Security Related'] = True
-
-                if len(bad_smell_entry) > DEFAULT_MAXIMUM_ALLOWED_SMELLS:
-                    bad_smells.append(bad_smell_entry)
+            if len(bad_smell_entry) > BAD_SMELL_DEFAULT_FIELD_AMOUNT:
+                bad_smells.append(bad_smell_entry)
 
         return bad_smells
 
@@ -99,7 +50,7 @@ def main():
         df = df.reindex(columns=columns)
         df.to_excel(output_file, index=False)
 
-    def run_nalabs(input_file, id_column, text_column, output_file,verbose_mode=False):
+    def run_nalabs(input_file, id_column, text_column, output_file, verbose_mode=False):
         """
         NALABS: Natural Language Analysis of Bad Smells in Software Requirements
 
@@ -153,7 +104,9 @@ def main():
         text_column = 'Requirement'
         output_file = DEFAULT_OUTPUT_FILE_PATH
 
-    run_nalabs(input_file, id_column, text_column, output_file, True)
+    verbose_mode = True if "--verbose" in sys.argv else False
+
+    run_nalabs(input_file, id_column, text_column, output_file, verbose_mode)
 
 
 if '__main__' == __name__:
