@@ -5,6 +5,7 @@ import sys
 DEFAULT_OUTPUT_FILE_PATH = 'bad_smells.xlsx'
 DEFAULT_INPUT_FILE_PATH = 'requirements.xlsx'
 
+
 from nalabs_rules import apply_all_rules
 def main():
 
