@@ -26,8 +26,9 @@ pip install pandas openpyxl spacy textstat textblob
 
 ### Spacy
 Spacy relies on explicitly installed language models. If the following error appears
-```OSError: [E050] Can't find model 'en_core_web_sm'. It doesn't seem to be a Python package or a valid path to a data directory.```
-then the model needs to be downloaded. Run the command `python -m spacy download en_core_web_sm` to download it.
+```OSError: [E050] Can't find model 'en_core_web_sm'. It doesn't seem to be a Python package or a valid path to a data directory.``` then the model needs to be downloaded. 
+
+Run the command `python -m spacy download en_core_web_sm` to download it.
 
 
 ## Usage
