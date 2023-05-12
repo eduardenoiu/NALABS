@@ -24,7 +24,41 @@ Report - MRTC, Mälardalen Real-Time Research Centre, Mälardalen University ISR
 10. Continuances (CT)
 and others...
 
-#  Documentation, Download and Install 
+# NALABSpy: Natural Language Analysis of Bad Smells in Software Requirements
+
+NALABS is a Python script designed to analyze software requirements and identify potential bad smells that may indicate issues in the requirement's quality or clarity. The script reads requirements from an Excel file, processes them using various linguistic techniques, and outputs an Excel file containing the detected bad smells for each requirement.
+
+## NALABSpy: Features
+
+NALABS performs the following analysis on each requirement:
+
+1. Detects ambiguous words
+2. Measures readability using the Flesch Reading Ease score
+3. Calculates subjectivity to identify potential weaknesses in the requirement
+4. Ensures that the requirement contains specific keywords
+5. Checks if the requirement is security-related
+
+## NALABSpy: Dependencies
+
+- pandas
+- openpyxl
+- spacy
+- textstat
+- textblob
+
+Install the dependencies using the following command:
+
+pip install pandas openpyxl spacy textstat textblob
+
+## NALABSpy: Usage
+
+Run the script using the following command:
+
+```bash
+python3 NALABS.py <input_file> <id_column> <text_column> <output_file>
+
+
+##  NALABS C# version - Documentation, Download and Install - 
 More details about NALABS can be found in  http://www.diva-portal.org/smash/record.jsf?pid=diva2%3A1332337&dswid=9711 
 
 NALABS is composed of two main components: the GUI as the main program executable and the metrics used as proxy for bad smells. 
@@ -34,7 +68,7 @@ The latest release of the NALABS executable can be downloaded from GitHub on the
 Add the package Microsoft.Office.Interop.Excel using the NuGet Package Manager. 
 
 
-#  Using NALABS
+#  NALABS C# version - Using NALABS
  First change some settings. Choose Edit/Settings menu tab. In the Excel view you should choose the REQ ID and Text column in the requirement excel document.
  
  To open a requirement excel file choose the File/Open menu tab
