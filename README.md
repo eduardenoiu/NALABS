@@ -10,7 +10,44 @@ Report - MRTC, Mälardalen Real-Time Research Centre, Mälardalen University ISR
 
 [ArXiv] (https://arxiv.org/abs/2202.05641)
 
-# Summary of Measures Used in NALABS
+# NALABSpy: Natural Language Analysis of Bad Smells in Software Requirements
+
+NALABS is a Python script designed to analyze software requirements and identify potential bad smells that may indicate issues in the requirement's quality or clarity. The script reads requirements from an Excel file, processes them using various linguistic techniques, and outputs an Excel file containing the detected bad smells for each requirement.
+
+You can find it in the NALABSpy directory. 
+
+## NALABSpy: Features
+
+NALABS performs the following analysis on each requirement:
+
+1. Detects ambiguous words
+2. Measures readability using the Flesch Reading Ease score
+3. Calculates subjectivity to identify potential weaknesses in the requirement
+4. Ensures that the requirement contains specific keywords
+5. Checks if the requirement is security-related
+
+## NALABSpy: Dependencies
+
+- pandas
+- openpyxl
+- spacy
+- textstat
+- textblob
+
+Install the dependencies using the following command:
+```
+pip3 install pandas openpyxl spacy textstat textblob
+```
+
+## NALABSpy: Usage
+
+Run the script using the following command:
+
+```bash
+python3 NALABS.py <input_file> <id_column> <text_column> <output_file>
+```
+
+# Summary of Measures Used in NALABS C# version
 
 1. Number of words (NW) 
 2. Number of vague phrases (NV) 
@@ -46,38 +83,3 @@ NALABS has been funded by the European Union’s Horizon 2020 research and innov
 
 # License
 NALABS's source code is released under the MIT license
-
-# NALABSpy: Natural Language Analysis of Bad Smells in Software Requirements
-
-NALABS is a Python script designed to analyze software requirements and identify potential bad smells that may indicate issues in the requirement's quality or clarity. The script reads requirements from an Excel file, processes them using various linguistic techniques, and outputs an Excel file containing the detected bad smells for each requirement.
-
-You can find it in the NALABSpy directory. 
-
-## NALABSpy: Features
-
-NALABS performs the following analysis on each requirement:
-
-1. Detects ambiguous words
-2. Measures readability using the Flesch Reading Ease score
-3. Calculates subjectivity to identify potential weaknesses in the requirement
-4. Ensures that the requirement contains specific keywords
-5. Checks if the requirement is security-related
-
-## NALABSpy: Dependencies
-
-- pandas
-- openpyxl
-- spacy
-- textstat
-- textblob
-
-Install the dependencies using the following command:
-
-pip install pandas openpyxl spacy textstat textblob
-
-## NALABSpy: Usage
-
-Run the script using the following command:
-
-```bash
-python3 NALABS.py <input_file> <id_column> <text_column> <output_file>
