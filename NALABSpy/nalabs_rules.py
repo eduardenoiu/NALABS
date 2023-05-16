@@ -87,9 +87,8 @@ def contains_any_keywords(requirement, keywords):
 
 
 def check_ambiguity_rule(_bad_smell_entry, data_header="Ambiguity Detected"):
-    requirement = _bad_smell_entry["Requirement"]
     # Rule 1: Check for ambiguous words using spaCy for part-of-speech tagging
-    doc = nlp(requirement)
+    doc = nlp(_bad_smell_entry["Requirement"])
     ambiguous_word_matches = [
         token.text for token in doc if token.text.lower() in ambiguous_words
     ]
@@ -99,9 +98,8 @@ def check_ambiguity_rule(_bad_smell_entry, data_header="Ambiguity Detected"):
 
 
 def check_reading_score_rule(_bad_smell_entry, data_header="Low Readability"):
-    requirement = _bad_smell_entry["Requirement"]
     # Rule 2: Check for low readability (Flesch Reading Ease score)
-    reading_ease_score = flesch_reading_ease(requirement)
+    reading_ease_score = flesch_reading_ease(_bad_smell_entry["Requirement"])
     if (
         reading_ease_score < DEFAULT_MINIMUM_REQUIRED_READING_SCORE
     ):  # Adjust the threshold as needed
@@ -112,9 +110,8 @@ def check_reading_score_rule(_bad_smell_entry, data_header="Low Readability"):
 
 
 def check_subjectivity_rule(_bad_smell_entry, data_header="Subjectivity Detected"):
-    requirement = _bad_smell_entry["Requirement"]
     # Rule 3: Check for subjectivity
-    blob = TextBlob(requirement)
+    blob = TextBlob(_bad_smell_entry["Requirement"])
     subjectivity_score = blob.sentiment.subjectivity
     if (
         subjectivity_score > DEFAULT_MAXIMUM_ALLOWED_SUBJECTIVITY_SCORE
@@ -126,9 +123,8 @@ def check_subjectivity_rule(_bad_smell_entry, data_header="Subjectivity Detected
 
 
 def check_is_requirement_rule(_bad_smell_entry, data_header="Not a Requirement"):
-    requirement = _bad_smell_entry["Requirement"]
     # Rule 4: Check if requirement text contains requirement keywords
-    if not contains_any_keywords(requirement, requirement_keywords):
+    if not contains_any_keywords(_bad_smell_entry["Requirement"], requirement_keywords):
         _bad_smell_entry[data_header] = True
     return _bad_smell_entry
 
