@@ -1,30 +1,19 @@
-import pandas as pd
 import sys
 from typing import List, Tuple
 
-DEFAULT_OUTPUT_FILE_PATH = "bad_smells.xlsx"
-DEFAULT_INPUT_FILE_PATH = "requirements.xlsx"
-
-
+from data_file_handlers import read_requirements_from_excel, write_bad_smells_to_excel, write_bad_smells_to_json, \
+    read_requirements_from_json
 from nalabs_rules import (
     apply_all_rules,
     make_smell_entry,
     BAD_SMELL_DEFAULT_FIELD_AMOUNT,
-    SMELL_DATA_HEADERS,
 )
 
+DEFAULT_OUTPUT_FILE_PATH = "bad_smells.xlsx"
+DEFAULT_INPUT_FILE_PATH = "requirements.xlsx"
 
 def main():
-    def read_requirements_from_excel(file_path, id_column, text_column):
-        df = pd.read_excel(file_path)
-        requirements = []
-        for index, row in df.iterrows():
-            req_id = row[id_column]
-            requirement = row[text_column]
-            requirements.append((req_id, requirement))
-        return requirements
-
-    def detect_bad_smells(requirements:List[Tuple[str, str]], hide_non_issues=True):
+    def detect_bad_smells(requirements: List[Tuple[str, str]], hide_non_issues=True):
         bad_smells = []
 
         for req_id, requirement in requirements:
@@ -38,22 +27,12 @@ def main():
             bad_smell_entry = make_smell_entry(req_id, requirement)
             bad_smell_entry = apply_all_rules(bad_smell_entry)
 
-            if hide_non_issues and len(bad_smell_entry) < BAD_SMELL_DEFAULT_FIELD_AMOUNT:
+            if hide_non_issues and len(bad_smell_entry) <= BAD_SMELL_DEFAULT_FIELD_AMOUNT:
                 pass
             else:
                 bad_smells.append(bad_smell_entry)
 
         return bad_smells
-
-    def write_bad_smells_to_excel(bad_smells, output_file):
-        if len(bad_smells) == 0:
-            return
-
-        df = pd.DataFrame(bad_smells)
-
-        # Reorder the DataFrame columns
-        df = df.reindex(columns=SMELL_DATA_HEADERS)
-        df.to_excel(output_file, index=False)
 
     def run_nalabs(input_file, id_column, text_column, output_file, verbose_mode=False):
         """
@@ -83,14 +62,13 @@ def main():
         """
         if verbose_mode:
             print("Reading requirements from file: " + input_file)
-        requirements = read_requirements_from_excel(input_file, id_column, text_column)
+        requirements = read_requirements_from_json(input_file, id_column, text_column)
         if verbose_mode:
             print("Running smell checker")
         bad_smells = detect_bad_smells(requirements)
         if verbose_mode:
             print("Printing report to output file: " + output_file)
-        write_bad_smells_to_excel(bad_smells, output_file)
-
+        write_bad_smells_to_json(bad_smells, output_file)
         if verbose_mode:
             print("Work done. Exiting!")
         return
