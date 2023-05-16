@@ -6,3 +6,8 @@
 /RCM/obj/x86
 /.vs/NALABS/v15/Server/sqlite3
 /packages/Microsoft.Office.Interop.Excel.15.0.4795.1000
+
+
+
+.DS_Store
+.idea/

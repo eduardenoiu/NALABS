@@ -2,13 +2,19 @@ import pandas as pd
 import sys
 
 
-DEFAULT_OUTPUT_FILE_PATH = 'bad_smells.xlsx'
-DEFAULT_INPUT_FILE_PATH = 'requirements.xlsx'
+DEFAULT_OUTPUT_FILE_PATH = "bad_smells.xlsx"
+DEFAULT_INPUT_FILE_PATH = "requirements.xlsx"
 
 
-from nalabs_rules import apply_all_rules
+from nalabs_rules import (
+    apply_all_rules,
+    make_smell_entry,
+    BAD_SMELL_DEFAULT_FIELD_AMOUNT,
+    SMELL_DATA_HEADERS,
+)
+
+
 def main():
-
     def read_requirements_from_excel(file_path, id_column, text_column):
         df = pd.read_excel(file_path)
         requirements = []
@@ -24,14 +30,13 @@ def main():
         for req_id, requirement in requirements:
             if not isinstance(requirement, str):
                 if verbose_mode:
-                    print("Skipping requirement that does not appear to be a string: " + requirement)
+                    print(
+                        "Skipping requirement that does not appear to be a string: "
+                        + requirement
+                    )
                 continue
-            bad_smell_entry = {
-                'ID': req_id,
-                'Requirement': requirement
-            }
-            BAD_SMELL_DEFAULT_FIELD_AMOUNT = len(bad_smell_entry)
-            bad_smell_entry = apply_all_rules(requirement, bad_smell_entry)
+            bad_smell_entry = make_smell_entry(req_id, requirement)
+            bad_smell_entry = apply_all_rules(bad_smell_entry)
 
             if len(bad_smell_entry) > BAD_SMELL_DEFAULT_FIELD_AMOUNT:
                 bad_smells.append(bad_smell_entry)
@@ -43,12 +48,9 @@ def main():
             return
 
         df = pd.DataFrame(bad_smells)
-        columns = ['ID', 'Requirement', 'Ambiguity Detected',
-                   'Low Readability', 'Subjectivity Detected',
-                   'Security Related', 'Not a Requirement']
 
         # Reorder the DataFrame columns
-        df = df.reindex(columns=columns)
+        df = df.reindex(columns=SMELL_DATA_HEADERS)
         df.to_excel(output_file, index=False)
 
     def run_nalabs(input_file, id_column, text_column, output_file, verbose_mode=False):
@@ -101,8 +103,8 @@ def main():
     # Example usage
     else:
         input_file = DEFAULT_INPUT_FILE_PATH
-        id_column = 'ID'
-        text_column = 'Requirement'
+        id_column = "ID"
+        text_column = "Requirement"
         output_file = DEFAULT_OUTPUT_FILE_PATH
 
     verbose_mode = True if "--verbose" in sys.argv else False
@@ -110,5 +112,5 @@ def main():
     run_nalabs(input_file, id_column, text_column, output_file, verbose_mode)
 
 
-if '__main__' == __name__:
+if "__main__" == __name__:
     main()
