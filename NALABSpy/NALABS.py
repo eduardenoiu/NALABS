@@ -1,6 +1,6 @@
 import pandas as pd
 import sys
-
+from typing import List, Tuple
 
 DEFAULT_OUTPUT_FILE_PATH = "bad_smells.xlsx"
 DEFAULT_INPUT_FILE_PATH = "requirements.xlsx"
@@ -24,7 +24,7 @@ def main():
             requirements.append((req_id, requirement))
         return requirements
 
-    def detect_bad_smells(requirements):
+    def detect_bad_smells(requirements:List[Tuple[str, str]], hide_non_issues=True):
         bad_smells = []
 
         for req_id, requirement in requirements:
@@ -38,7 +38,9 @@ def main():
             bad_smell_entry = make_smell_entry(req_id, requirement)
             bad_smell_entry = apply_all_rules(bad_smell_entry)
 
-            if len(bad_smell_entry) > BAD_SMELL_DEFAULT_FIELD_AMOUNT:
+            if hide_non_issues and len(bad_smell_entry) < BAD_SMELL_DEFAULT_FIELD_AMOUNT:
+                pass
+            else:
                 bad_smells.append(bad_smell_entry)
 
         return bad_smells
