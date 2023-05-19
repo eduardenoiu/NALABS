@@ -79,6 +79,7 @@ DEFAULT_MAXIMUM_ALLOWED_SUBJECTIVITY_SCORE = 0.5
 def make_smell_entry(id: str, smell_content: str):
     return {"ID": id, "Requirement": smell_content}
 
+
 BAD_SMELL_DEFAULT_FIELD_AMOUNT = len(make_smell_entry("dummy", "dummy"))
 
 
@@ -98,21 +99,30 @@ def check_ambiguity_rule(requirement):
 def check_reading_score_rule(requirement):
     # Rule 2: Check for low readability (Flesch Reading Ease score)
     reading_ease_score = flesch_reading_ease(requirement)
-    return f"Flesch Reading Ease: {reading_ease_score:.2f}" if (
-        # Adjust the threshold as needed
-        reading_ease_score < DEFAULT_MINIMUM_REQUIRED_READING_SCORE
-    ) else ""
-
+    return (
+        f"Flesch Reading Ease: {reading_ease_score:.2f}"
+        if (
+            # Adjust the threshold as needed
+            reading_ease_score
+            < DEFAULT_MINIMUM_REQUIRED_READING_SCORE
+        )
+        else ""
+    )
 
 
 def check_subjectivity_rule(requirement):
     # Rule 3: Check for subjectivity
     blob = TextBlob(requirement)
     subjectivity_score = blob.sentiment.subjectivity
-    return f"Subjectivity Score: {subjectivity_score:.2f}" if (
-        # Adjust the threshold as needed
-        subjectivity_score > DEFAULT_MAXIMUM_ALLOWED_SUBJECTIVITY_SCORE
-    ) else ""
+    return (
+        f"Subjectivity Score: {subjectivity_score:.2f}"
+        if (
+            # Adjust the threshold as needed
+            subjectivity_score
+            > DEFAULT_MAXIMUM_ALLOWED_SUBJECTIVITY_SCORE
+        )
+        else ""
+    )
 
 
 def check_is_requirement_rule(requirement):
@@ -125,7 +135,6 @@ def check_security_related_rule(requirement):
     return contains_any_keywords(requirement, security_keywords)
 
 
-
 SMELL_DATA_HEADERS = [
     "ID",
     "Requirement",
@@ -136,12 +145,14 @@ SMELL_DATA_HEADERS = [
     "Not a Requirement",
 ]
 all_rules_functions = [
-        check_ambiguity_rule,
-        check_reading_score_rule,
-        check_subjectivity_rule,
-        check_security_related_rule,
-        check_is_requirement_rule,
+    check_ambiguity_rule,
+    check_reading_score_rule,
+    check_subjectivity_rule,
+    check_security_related_rule,
+    check_is_requirement_rule,
 ]
+
+
 def apply_all_rules(smell_entry):
     # Each rule shall mutate the bad smell data entry
     for dh, rule_check in zip(SMELL_DATA_HEADERS[2:], all_rules_functions):
