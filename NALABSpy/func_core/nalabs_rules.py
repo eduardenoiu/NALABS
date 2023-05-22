@@ -9,7 +9,8 @@ from functools import partial
 nlp = spacy.load("en_core_web_sm")
 
 # Register 'subjectivity' extension attribute
-Doc.set_extension("subjectivity", default=0.0)
+if(Doc.get_extension("subjectivity")) is None:
+    Doc.set_extension("subjectivity", default=0.0)
 
 ambiguous_words = {
     "may",
@@ -89,7 +90,7 @@ vagueness_keywords = {"may", "could", "has to", "have to", "might", "will", "sho
                       "capability to", "effective", "normal"}
 references_keywords = {"e.g.", "i.e.", "for example", "for instance", "figure", "table", "note"}
 subjectivity_keywords = {"similar", "better", "similarly", "worse", "having in mind", "take into account",
-                         "take into consideration", "as possible"}
+                         "take into consideration", "as possible", "good", "smart", "clever"}
 weakness_keywords = {"adequate", "as appropriate", "be able to", "be capable of", "capability", "effective",
                      "as required", "normal", "provide for", "timely", "easy to"}
 
@@ -138,7 +139,7 @@ def check_reading_score_rule(requirement):
     )
 
 
-def check_subjectivity_rule(requirement):
+def check_subjectivity_rule(max_subjectivity_score, requirement):
     # Rule 3: Check for subjectivity
     blob = TextBlob(requirement)
     subjectivity_score = blob.sentiment.subjectivity
@@ -147,7 +148,7 @@ def check_subjectivity_rule(requirement):
         if (
             # Adjust the threshold as needed
                 subjectivity_score
-                > DEFAULT_MAXIMUM_ALLOWED_SUBJECTIVITY_SCORE
+                > max_subjectivity_score
         )
         else ""
     )
@@ -173,11 +174,11 @@ SMELL_DATA_HEADERS = [
 all_rules_functions = [
     check_ambiguity_rule,
     check_reading_score_rule,
-    check_subjectivity_rule,
+    partial(check_subjectivity_rule, DEFAULT_MAXIMUM_ALLOWED_SUBJECTIVITY_SCORE),
     check_security_related_rule,
     check_is_requirement_rule,
 ]
-smell_rules = zip(SMELL_DATA_HEADERS, all_rules_functions)
+smell_rules = [(SMELL_DATA_HEADERS[i], all_rules_functions[i]) for i in range(len(SMELL_DATA_HEADERS))]
 
 metrics_checks = [("Optionality", partial(count_forbidden_words, optionality_keywords)),
                   ("Conjunction", partial(count_forbidden_words, conjunction_keywords)),

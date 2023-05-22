@@ -1,8 +1,7 @@
 import json
 
 import pandas as pd
-from nalabs_rules import SMELL_DATA_HEADERS
-from typing import List, Tuple
+from .nalabs_rules import SMELL_DATA_HEADERS
 
 
 def read_requirements_from_excel(file_path, id_column: str, text_column: str):

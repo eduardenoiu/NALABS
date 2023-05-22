@@ -1,15 +1,12 @@
 #! python
 import argparse
-import sys
 from typing import List, Tuple
 
-from data_file_handlers import (
-    read_requirements_from_excel,
-    write_bad_smells_to_excel,
+from func_core.data_file_handlers import (
     write_bad_smells_to_json,
     read_requirements_from_json,
 )
-from nalabs_rules import (
+from func_core.nalabs_rules import (
     apply_smell_rules,
     make_smell_entry,
     BAD_SMELL_DEFAULT_FIELDS, apply_all_rules,
@@ -50,30 +47,31 @@ arg_parser.add_argument("-v", "--verbose", required=False, action="store_true")
 arg_parser.add_argument("-A", "--all-checks", required=False, action="store_true")
 
 
-def main():
-    def detect_bad_smells(smell_detection_function, requirements: List[Tuple[str, str]], hide_non_issues=True):
-        bad_smells = []
+def detect_bad_smells(smell_detection_function, requirements: List[Tuple[str, str]], hide_non_issues=True, verbose=False):
+    bad_smells = []
 
-        for req_id, requirement in requirements:
-            if not isinstance(requirement, str):
-                if args.verbose:
-                    print(
-                        "Skipping requirement that does not appear to be a string: "
-                        + requirement
-                    )
-                continue
-            bad_smell_entry = make_smell_entry(req_id, requirement)
-            bad_smell_entry = smell_detection_function(bad_smell_entry)
+    for req_id, requirement in requirements:
+        if not isinstance(requirement, str):
+            if verbose:
+                print(
+                    "Skipping requirement that does not appear to be a string: "
+                    + requirement
+                )
+            continue
+        bad_smell_entry = make_smell_entry(req_id, requirement)
+        bad_smell_entry = smell_detection_function(bad_smell_entry)
 
-            if (
+        if (
                 hide_non_issues
                 and len(bad_smell_entry) <= len(BAD_SMELL_DEFAULT_FIELDS)
-            ):
-                pass
-            else:
-                bad_smells.append(bad_smell_entry)
+        ):
+            pass
+        else:
+            bad_smells.append(bad_smell_entry)
 
-        return bad_smells
+    return bad_smells
+
+def main():
 
     def run_nalabs(input_file, id_column, text_column, output_file, verbose_mode=False):
         smell_detector = apply_all_rules if args.all_checks else apply_smell_rules
