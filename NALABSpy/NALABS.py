@@ -10,9 +10,9 @@ from data_file_handlers import (
     read_requirements_from_json,
 )
 from nalabs_rules import (
-    apply_all_rules,
+    apply_smell_rules,
     make_smell_entry,
-    BAD_SMELL_DEFAULT_FIELD_AMOUNT,
+    BAD_SMELL_DEFAULT_FIELDS, apply_all_rules,
 )
 
 DEFAULT_TEXT_COLUMN_NAME = "Requirement"
@@ -47,10 +47,11 @@ arg_parser.add_argument(
     "--text-header", required=False, default=DEFAULT_TEXT_COLUMN_NAME
 )
 arg_parser.add_argument("-v", "--verbose", required=False, action="store_true")
+arg_parser.add_argument("-A", "--all-checks", required=False, action="store_true")
 
 
 def main():
-    def detect_bad_smells(requirements: List[Tuple[str, str]], hide_non_issues=True):
+    def detect_bad_smells(smell_detection_function, requirements: List[Tuple[str, str]], hide_non_issues=True):
         bad_smells = []
 
         for req_id, requirement in requirements:
@@ -62,11 +63,11 @@ def main():
                     )
                 continue
             bad_smell_entry = make_smell_entry(req_id, requirement)
-            bad_smell_entry = apply_all_rules(bad_smell_entry)
+            bad_smell_entry = smell_detection_function(bad_smell_entry)
 
             if (
                 hide_non_issues
-                and len(bad_smell_entry) <= BAD_SMELL_DEFAULT_FIELD_AMOUNT
+                and len(bad_smell_entry) <= len(BAD_SMELL_DEFAULT_FIELDS)
             ):
                 pass
             else:
@@ -75,12 +76,14 @@ def main():
         return bad_smells
 
     def run_nalabs(input_file, id_column, text_column, output_file, verbose_mode=False):
+        smell_detector = apply_all_rules if args.all_checks else apply_smell_rules
+
         if verbose_mode:
             print("Reading requirements from file: " + input_file)
         requirements = read_requirements_from_json(input_file, id_column, text_column)
         if verbose_mode:
             print("Running smell checker")
-        bad_smells = detect_bad_smells(requirements)
+        bad_smells = detect_bad_smells(smell_detector, requirements)
         if verbose_mode:
             print("Printing report to output file: " + output_file)
         write_bad_smells_to_json(bad_smells, output_file)
