@@ -1,0 +1,27 @@
+[
+  {
+    "ID": 1,
+    "Requirement": "The system has to have some functions that can run things."
+  },
+  {
+    "ID": 2,
+    "Requirement": "Would be cool if we could make the left textbox bigger."
+  },
+  {
+    "ID": "FAKE_3",
+    "Requirement": "The title heading shall have a font size of 42."
+  },
+
+  {
+    "ID": "Smart_sol",
+    "Requirement": "The implementation should be free from smart solutions."
+  },
+  {
+    "ID": "Smart_sol2",
+    "Requirement": "The implementation should be free from smart solutions. By not doing it in a smart way, we mean that the solution shall be as clear and straightforward as possible, with no additional cleverness."
+  },
+  {
+    "ID": "lang_1",
+    "Requirement": "The implementation language required must be FBD."
+  }
+]
