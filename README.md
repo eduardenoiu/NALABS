@@ -47,6 +47,16 @@ Run the script using the following command:
 python3 NALABS.py <input_file> <id_column> <text_column> <output_file>
 ```
 
+## NALABSpy: GUI
+To run NALABSpy through a GUI, the following command should be run to install the web frontend:
+```
+pip install streamlit st-annotated-text
+```
+Once the packages have been installed, the web server can be started using
+```
+streamlit run web_gui.py
+```
+
 # Summary of Measures Used in NALABS C# version
 
 1. Number of words (NW) 
