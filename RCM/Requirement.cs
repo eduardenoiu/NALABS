@@ -147,6 +147,8 @@ namespace RCM
                     wordsum += s.Length;
                 }
                 this.ARI = sum / this.Sentences.Length + 9 * (wordsum / this.Words.Count());
+                this.Status = ValidateAllMetrics();
+
                 NotifyPropertyChanged("Text");
                 NotifyPropertyChanged("WordNumber");
                 NotifyPropertyChanged("Conjunctions");
@@ -156,6 +158,8 @@ namespace RCM
                 NotifyPropertyChanged("References");
                 NotifyPropertyChanged("Weakness");
                 NotifyPropertyChanged("ARI");
+                NotifyPropertyChanged("Status");
+                NotifyPropertyChanged("ErrorMessage");
             }
         }
 
@@ -173,6 +177,8 @@ namespace RCM
         public int Continuances { get; set; }
         public int Imperatives2 { get; set; }
         public int References2 { get; set; }
+        public string Status { get; set; }
+        public string ErrorMessage { get; set; }
 
         public Requirement(string id, string text)
         {
@@ -207,6 +213,77 @@ namespace RCM
         {
             if (PropertyChanged != null)
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName)); //  .Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private string ValidateAllMetrics()
+        {
+            int errorsCount = 0;
+            this.ErrorMessage = "-";
+            var errorMessages = new StringBuilder();
+            if (this.Conjunctions > 5)
+            {
+                errorMessages.AppendLine($"Error: Conjunctions value is [ {Conjunctions} ] which is greater than 5");
+                errorsCount++;
+            }
+            if (this.VaguePhrases > 0)
+            {
+                errorMessages.AppendLine($"Error: VaguePhrases value is [ {VaguePhrases} ] which is greater than 0");
+                errorsCount++;
+            }
+            if (this.Optionality > 0)
+            {
+                errorMessages.AppendLine($"Error: Optionality value is [ {Optionality} ] which is greater than 0");
+                errorsCount++;
+            }
+            if (this.Subjectivity > 0)
+            {
+                errorMessages.AppendLine($"Error: Subjectivity value is [ {Subjectivity} ] which is greater than 0");
+                errorsCount++;
+            }
+            if (this.References > 4)
+            {
+                errorMessages.AppendLine($"Error: References value is [ {References} ] which is greater than 4");
+                errorsCount++;
+            }
+            if (this.Weakness > 0)
+            {
+                errorMessages.AppendLine($"Error: Weakness value is [ {Weakness} ] which is greater than 0");
+                errorsCount++;
+            }
+            if (this.Imperatives > 5)
+            {
+                errorMessages.AppendLine($"Error: Imperatives value is [ {Imperatives} ] which is greater than 5");
+                errorsCount++;
+            }
+            if (this.Continuances > 5)
+            {
+                errorMessages.AppendLine($"Error: Continuances value is [ {Continuances} ] which is greater than 5");
+                errorsCount++;
+            }
+            if (this.Imperatives2 > 5)
+            {
+                errorMessages.AppendLine($"Error: Imperatives2 value is [ {Imperatives2} ] which is greater than 5");
+                errorsCount++;
+            }
+            if (this.References2 > 4)
+            {
+                errorMessages.AppendLine($"Error: References2 value is [ {References2} ] which is greater than 4");
+                errorsCount++;
+            }
+            if (this.ARI > 70)
+            {
+                errorMessages.AppendLine($"Error: ARI value is [ {ARI} ] which is greater than 70");
+                errorsCount++;
+            }
+
+            if (errorsCount > 0)
+            {
+                errorMessages.Insert(0, errorsCount > 1 ?
+                 $"The requirement's Metrics validation has {errorsCount} errors:" + Environment.NewLine : $"The requirement's Metrics validation has one error:" + Environment.NewLine);
+                this.ErrorMessage = errorMessages.ToString();
+            }
+
+            return errorsCount > 0 ? "Failed" : "Passed";
         }
     }
 }
