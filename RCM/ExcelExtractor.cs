@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.Office.Interop.Excel;
 using System.IO;
 using System.Data;
 using System.Threading.Tasks;
@@ -12,6 +11,9 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using RCM.Settings;
+using System.Reflection;
+using RCM.Extensions;
+using ClosedXML.Excel;
 
 namespace RCM
 {
@@ -42,9 +44,7 @@ namespace RCM
             get { return filePath; }
             set { filePath = value; }
         }
-       
-        private Workbook wb;
-        private Microsoft.Office.Interop.Excel.Application excel;
+
         public event EventHandler LoadedData;
         public ExcelExtractor()
         {
@@ -67,150 +67,111 @@ namespace RCM
             if (d != null)
                 d.DynamicInvoke(this, new EventArgs());
         }
+
         public void Read(string path)
         {
             Invoke(ReadingExcelData);
-            Instance.FilePath = path;
-            //excel = new Microsoft.Office.Interop.Excel.Application();
-            //excel.DisplayAlerts = false;
-            //Microsoft.Office.Interop.Excel.Workbook wb = excel.Workbooks.Open(FilePath, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
-            //Microsoft.Office.Interop.Excel.Worksheet sheet = wb.Worksheets.get_Item(1);
-            //Microsoft.Office.Interop.Excel.Range idColumn = sheet.get_Range(idCol, null);
-            //Microsoft.Office.Interop.Excel.Range textColumn = sheet.get_Range(textCol, null);
-            //DataSet allData = new DataSet();
-
-
-            if (excel == null)
+            if (!File.Exists(FilePath))
             {
-                bool opened = Open(path);
-                if (!opened)
-                    return;
+                MessageBox.Show("File not found!");
+                return;
             }
-            DataSet allData = new DataSet(wb.Name);
-            Worksheet sheet = wb.Worksheets[1];
-            System.Data.DataTable table = new System.Data.DataTable(sheet.Name);
 
-            Range range = sheet.UsedRange;
-
-            object[,] values = (object[,])range.Value;
-            if (values != null)
+            try
             {
-                int cols = values.GetLength(1);
-                int rows = values.GetLength(0);
+                System.Data.DataTable dataTable;
 
-                table.Columns.Add(new DataColumn(Convert.ToString(values[1, idCol])));
-                table.Columns.Add(new DataColumn(Convert.ToString(values[1, textCol])));
-
-                for (int i = 2; i <= rows; i++)
+                using (var excelWorkbook = new XLWorkbook(filePath))
                 {
-                    DataRow row = table.NewRow();
-                    row[0] = values[i, idCol];
-                    row[1] = values[i, textCol];
-                    table.Rows.Add(row);
+                    var worksheet = excelWorkbook.Worksheet(1);
+                    if (worksheet == null)
+                    {
+                        MessageBox.Show("No worksheet found in the Excel file.");
+                        return;
+                    }
+
+                    dataTable = new System.Data.DataTable(worksheet.Name);
+
+                    bool FirstRow = true;
+                   
+                    // Range for reading the cells based on the last cell used.
+                    string readRange = "1:1";
+                    foreach (IXLRow row in worksheet.RowsUsed())
+                    {
+                        // If Reading the First Row (used) then add them as column name
+                        if (FirstRow)
+                        {
+                            // Checking the Last cell used for column generation in datatable
+                            readRange = string.Format("{0}:{1}", 1, row.LastCellUsed().Address.ColumnNumber);
+                            foreach (IXLCell cell in row.Cells(readRange))
+                            {
+                                dataTable.Columns.Add(cell.Value.ToString());
+                            }
+                            FirstRow = false;
+                        }
+                        else
+                        {
+                            // Adding a Row in datatable
+                            dataTable.Rows.Add();
+
+                            int cellIndex = 0;
+                           
+                            // Updating the values of datatable
+                            foreach (IXLCell cell in row.Cells(readRange))
+                            {
+                                dataTable.Rows[dataTable.Rows.Count - 1][cellIndex] = cell.Value.ToString();
+                                cellIndex++;
+                            }
+                        }
+                    }
                 }
-                allData.Tables.Add(table);
-            }
-            Invoke(ExcelDataReceived);
-            Close();
 
-            int j = 0;
-            ConcurrentBag<Requirement> requirements = new ConcurrentBag<Requirement>();
-            System.Data.DataTable reqTable = allData.Tables[0];
-            if (reqTable != null && reqTable.Rows.Count != 0)
-            {
-                foreach(DataRow req in reqTable.Rows)
+                Invoke(ExcelDataReceived);
+
+                int j = 0;
+                ConcurrentBag<Requirement> requirements = new ConcurrentBag<Requirement>();
+                System.Data.DataTable reqTable = dataTable;
+                if (reqTable != null && reqTable.Rows.Count != 0)
                 {
-                    string id = null;
-                    string text = null;
-                    try
+                    foreach (DataRow req in reqTable.Rows)
                     {
-                        id = Convert.ToString(req[0]).Trim(new char[] { ' ', '\n' });
-                        text = Convert.ToString(req[1]);
-                        //Requirements.Items.Add(new Requirement(){Id = id, Text = text });                     
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
-                    if (id != null)
-                    {
-                        Requirement newReq = new Requirement(id, text);
-                        requirements.Add(newReq);
-                    }
-                };
+                        string id = null;
+                        string text = null;
+                        try
+                        {
+                            id = Convert.ToString(req[0]).Trim(new char[] { ' ', '\n' });
+                            text = Convert.ToString(req[1]);
+                            if (id != null)
+                            {
+                                Requirement newReq = new Requirement(id, text);
+                                requirements.Add(newReq);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        }
+                    };
+                }
+
+                var requirementsList = requirements.OrderBy(r => r.Id).ToList();
+                Requirement.AllRequirements = new ObservableCollection<Requirement>(requirementsList);
+
+                System.Data.DataTable dt = requirementsList.ToDataTable();
+                if (dt != null && dt.Rows.Count > 0)
+                {
+                    var filePath = Directory.GetCurrentDirectory();
+                    dt.ToJson(Path.Combine(filePath, "rcm_output.json"));
+                }
             }
-            Requirement.AllRequirements = new ObservableCollection<Requirement>(requirements.ToList());
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading Excel file: {ex.Message}");
+            }
         }
 
         public event EventHandler ReadingExcelData;
 
         public event EventHandler ExcelDataReceived;
-
-        public void Close()
-        {
-            if (wb != null)
-                wb.Close(false, Type.Missing, Type.Missing);
-            if (excel != null)
-            {
-                Marshal.ReleaseComObject(wb);
-
-                excel.Quit();
-                Marshal.ReleaseComObject(excel);
-
-                wb = null;
-                excel = null;
-
-                GC.GetTotalMemory(false);
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-                GC.Collect();
-                GC.GetTotalMemory(true);
-            }
-        }
-
-        public bool Open(string path)
-        {
-            try
-            {
-                if (excel == null)
-                    excel = new Microsoft.Office.Interop.Excel.Application();
-                if (excel == null)
-                    return false;
-                excel.Visible = false;
-                excel.DisplayAlerts = false;
-                if (File.Exists(path))
-                    wb = excel.Workbooks.Open(path, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
-                else wb = excel.Workbooks.Add();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public void Save(string path)
-        {
-            bool opened = Open(path);
-            if (!opened)
-                return;
-            
-            Worksheet sheet = wb.Worksheets[1];
-            
-            sheet.Name = "Requirements measures";
-
-            sheet.Cells[1, 1] = "ID";
-            sheet.Cells[1, 2] = "Requirement text";
-            int i = 1;
-            foreach (Requirement req in Requirement.AllRequirements)
-            {
-                i++;
-                sheet.Cells[i,1] = req.Id;
-                sheet.Cells[i,2] = req.Text;
-            }
-
-            wb.SaveAs(path, XlFileFormat.xlCSV);
-            Close();
-        }
     }
 }
