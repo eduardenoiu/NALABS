@@ -1,13 +1,12 @@
 ﻿<Window x:Class="RCM.Chart"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:dv="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
-        xmlns:DVC="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+        xmlns:DVC="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=DotNetProjects.DataVisualization.Toolkit"
         Title="Chart" Height="400" Width="600">
     <Grid>
         <TabControl>
             <TabItem Header="Metrics chart">
-                <DVC:Chart Canvas.Top="0" Canvas.Left="10" Name="lineChart" LegendStyle=""  >
+                <DVC:Chart Canvas.Top="0" Canvas.Left="10" Name="lineChart" >
                     <DVC:Chart.Series>                        
                         <DVC:ScatterSeries Title="NW" IndependentValueBinding ="{Binding Path=Key}" DependentValueBinding="{Binding Path=Value}" >
                         </DVC:ScatterSeries>

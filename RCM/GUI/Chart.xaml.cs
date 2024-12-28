@@ -27,16 +27,17 @@ namespace RCM
             {
                 Cursor prev = Mouse.OverrideCursor;
                 Mouse.OverrideCursor = Cursors.Wait;
-                ((BarSeries)lineChart.Series[0]).ItemsSource = Requirement.AllRequirements.Select(s => new KeyValuePair<int, int>(Requirement.AllRequirements.IndexOf(s), s.WordNumber));
-                //((BarSeries)lineChart.Series[1]).ItemsSource = Requirement.AllRequirements.Select(s => new KeyValuePair<int, int>(Requirement.AllRequirements.IndexOf(s), s.Conjunctions));
+                ((ScatterSeries)lineChart.Series[0]).ItemsSource = Requirement.AllRequirements.Select(s => new KeyValuePair<int, int>(Requirement.AllRequirements.IndexOf(s), s.WordNumber));
+                
+                //((ScatterSeries)lineChart.Series[1]).ItemsSource = Requirement.AllRequirements.Select(s => new KeyValuePair<int, int>(Requirement.AllRequirements.IndexOf(s), s.Conjunctions));
                 //((BarSeries)lineChart.Series[2]).ItemsSource = Requirement.AllRequirements.Select(s => new KeyValuePair<int, int>(Requirement.AllRequirements.IndexOf(s), s.VaguePhrases));
                 //((BarSeries)lineChart.Series[3]).ItemsSource = Requirement.AllRequirements.Select(s => new KeyValuePair<int, int>(Requirement.AllRequirements.IndexOf(s), s.Optionality));
                 //((BarSeries)lineChart.Series[4]).ItemsSource = Requirement.AllRequirements.Select(s => new KeyValuePair<int, int>(Requirement.AllRequirements.IndexOf(s), s.Subjectivity));
                 //((BarSeries)lineChart.Series[5]).ItemsSource = Requirement.AllRequirements.Select(s => new KeyValuePair<int, int>(Requirement.AllRequirements.IndexOf(s), s.References)); 
                 //((BarSeries)lineChart.Series[6]).ItemsSource = Requirement.AllRequirements.Select(s => new KeyValuePair<int, int>(Requirement.AllRequirements.IndexOf(s), s.Weakness));
                 //((BarSeries)lineChart.Series[7]).ItemsSource = Requirement.AllRequirements.Select(s => new KeyValuePair<int, int>(Requirement.AllRequirements.IndexOf(s), s.Imperatives));
-                
-                
+
+
                 Mouse.OverrideCursor = prev;
             }
         }
