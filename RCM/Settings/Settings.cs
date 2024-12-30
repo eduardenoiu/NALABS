@@ -75,7 +75,7 @@ namespace RCM.Settings
             DataRow r = ex.NewRow();
             r["ID"] = ExcelExtractor.Instance.IdCol;
             r["Text"] = ExcelExtractor.Instance.TextCol;
-            r["Path"] = ExcelExtractor.Instance.FilePath;
+            r["Path"] = ExcelExtractor.Instance.FilePath ?? ExcelExtractor.Instance.DefaultFilePath;
             ex.Rows.Add(r);
             Data.AllData.Tables.Add(ex);
             Data.Save();

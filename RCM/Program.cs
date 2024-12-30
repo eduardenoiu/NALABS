@@ -5,6 +5,9 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Threading;
+using System.IO;
+using RCM.Settings;
+using RCM.Metrics;
 
 namespace RCM
 {
@@ -53,10 +56,32 @@ namespace RCM
             //Cursor prev = Mouse.OverrideCursor;
             //Mouse.OverrideCursor = Cursors.Wait;
             mSplash.UpdateStatus("Reading Settings...", 20);
-            Settings.Settings.Init();
+
+            InitSettings();
+
             mSplash.UpdateStatus("Reading Settings done", 20);
             mSplash.Dispatcher.Invoke(new Action(mSplash.Close));
            // Mouse.OverrideCursor = prev;
+        }
+        static void InitSettings()
+        {
+            try
+            {
+                if (!File.Exists(SettingsDatabase.Instance.FilePath))
+                {
+                    Settings.Settings.Init();
+                    MetricManager.SetMetricKeywords();
+
+                    Settings.Settings.SaveSettings();
+                }
+
+                if (File.Exists(SettingsDatabase.Instance.FilePath))
+                    Settings.Settings.Init();
+            }
+            catch (Exception ex)
+            {
+                File.WriteAllText("rcm_log.txt", ex.Message);
+            }
         }
 
         static void Instance_ExcelDataReceived(object sender, EventArgs e)

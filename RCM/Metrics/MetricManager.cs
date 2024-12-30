@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.ComponentModel.Composition.Hosting;
+using System.Threading.Tasks;
 
 namespace RCM.Metrics
 {
@@ -32,6 +33,15 @@ namespace RCM.Metrics
         }
 
         public List<Metric<IMetric>> AllMetrics;
+
+        public static void SetMetricKeywords()
+        {
+            Parallel.ForEach(Instance.AllMetrics, m =>
+            {
+                m.Instance.Keywords = m.Instance.DefaultKeywords;
+            });
+        }
+
         internal void UpdateMetrics()
         {
             invoke(LoadingMetrics);

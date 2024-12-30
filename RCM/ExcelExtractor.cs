@@ -38,6 +38,21 @@ namespace RCM
                 
         private string filePath;
 
+        public string DefaultFilePath
+        {
+            get
+            {
+                if (Environment.GetEnvironmentVariable("CI") == "true")
+                {
+                    return System.Configuration.ConfigurationManager.AppSettings["CIFunctionalReqFilePath"];
+                }
+                else
+                {
+                    var defaultPath = System.Configuration.ConfigurationManager.AppSettings["DefaultFunctionalReqFilePath"];
+                    return Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + defaultPath;
+                }
+            }
+        }
 
         public string FilePath
         {

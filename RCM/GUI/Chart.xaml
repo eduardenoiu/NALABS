@@ -7,7 +7,7 @@
         <TabControl>
             <TabItem Header="Metrics chart">
                 <DVC:Chart Canvas.Top="0" Canvas.Left="10" Name="lineChart" >
-                    <DVC:Chart.Series>                        
+                    <DVC:Chart.Series>
                         <DVC:ScatterSeries Title="NW" IndependentValueBinding ="{Binding Path=Key}" DependentValueBinding="{Binding Path=Value}" >
                         </DVC:ScatterSeries>
                         <DVC:ScatterSeries Title="NC" IndependentValueBinding ="{Binding Path=Key}" DependentValueBinding="{Binding Path=Value}">
