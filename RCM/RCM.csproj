@@ -81,6 +81,7 @@
     <Compile Include="GUI\Chart.xaml.cs">
       <DependentUpon>Chart.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ConfigurationHelper.cs" />
     <Compile Include="Metrics\ConjunctionMetric.cs" />
     <Compile Include="ExcelExtractor.cs" />
     <Compile Include="Metrics\ContinuancesMetric.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Metrics\MetricInfoAttribute.cs" />
     <Compile Include="Metrics\MetricManager.cs" />
     <Compile Include="Metrics\MetricSettingsImporter.cs" />
+    <Compile Include="Metrics\MaximumAcceptableMetricValues.cs" />
     <Compile Include="Metrics\NVMetric.cs" />
     <Compile Include="Metrics\OptionalityMetric.cs" />
     <Compile Include="Metrics\References2.cs" />
