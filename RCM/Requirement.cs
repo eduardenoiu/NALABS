@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Threading;
 using RCM.Metrics;
+using RCM.Helpers;
 
 namespace RCM
 {
@@ -220,66 +221,68 @@ namespace RCM
             int errorsCount = 0;
             this.ErrorMessage = "-";
             var errorMessages = new StringBuilder();
-            if (this.Conjunctions > 5)
+
+            var maximumAcceptableMetricValues = ConfigurationHelper.GetMaximumAcceptableMetricValues();
+            if (this.Conjunctions > maximumAcceptableMetricValues.Conjunctions)
             {
-                errorMessages.AppendLine($"Error: Conjunctions value is [ {Conjunctions} ] which is greater than 5");
+                errorMessages.AppendLine($"Error: Conjunctions value is [ {Conjunctions} ] which is greater than {maximumAcceptableMetricValues.Conjunctions}");
                 errorsCount++;
             }
-            if (this.VaguePhrases > 0)
+            if (this.VaguePhrases > maximumAcceptableMetricValues.VaguePhrases)
             {
-                errorMessages.AppendLine($"Error: VaguePhrases value is [ {VaguePhrases} ] which is greater than 0");
+                errorMessages.AppendLine($"Error: VaguePhrases value is [ {VaguePhrases} ] which is greater than {maximumAcceptableMetricValues.VaguePhrases}");
                 errorsCount++;
             }
-            if (this.Optionality > 0)
+            if (this.Optionality > maximumAcceptableMetricValues.Optionality)
             {
-                errorMessages.AppendLine($"Error: Optionality value is [ {Optionality} ] which is greater than 0");
+                errorMessages.AppendLine($"Error: Optionality value is [ {Optionality} ] which is greater than {maximumAcceptableMetricValues.Optionality}");
                 errorsCount++;
             }
-            if (this.Subjectivity > 0)
+            if (this.Subjectivity > maximumAcceptableMetricValues.Subjectivity)
             {
-                errorMessages.AppendLine($"Error: Subjectivity value is [ {Subjectivity} ] which is greater than 0");
+                errorMessages.AppendLine($"Error: Subjectivity value is [ {Subjectivity} ] which is greater than {maximumAcceptableMetricValues.Subjectivity}");
                 errorsCount++;
             }
-            if (this.References > 4)
+            if (this.References > maximumAcceptableMetricValues.References)
             {
-                errorMessages.AppendLine($"Error: References value is [ {References} ] which is greater than 4");
+                errorMessages.AppendLine($"Error: References value is [ {References} ] which is greater than {maximumAcceptableMetricValues.References}");
                 errorsCount++;
             }
-            if (this.Weakness > 0)
+            if (this.Weakness > maximumAcceptableMetricValues.Weakness)
             {
-                errorMessages.AppendLine($"Error: Weakness value is [ {Weakness} ] which is greater than 0");
+                errorMessages.AppendLine($"Error: Weakness value is [ {Weakness} ] which is greater than {maximumAcceptableMetricValues.Weakness}");
                 errorsCount++;
             }
-            if (this.Imperatives > 5)
+            if (this.Imperatives > maximumAcceptableMetricValues.Imperatives)
             {
-                errorMessages.AppendLine($"Error: Imperatives value is [ {Imperatives} ] which is greater than 5");
+                errorMessages.AppendLine($"Error: Imperatives value is [ {Imperatives} ] which is greater than {maximumAcceptableMetricValues.Imperatives}");
                 errorsCount++;
             }
-            if (this.Continuances > 5)
+            if (this.Continuances > maximumAcceptableMetricValues.Continuances)
             {
-                errorMessages.AppendLine($"Error: Continuances value is [ {Continuances} ] which is greater than 5");
+                errorMessages.AppendLine($"Error: Continuances value is [ {Continuances} ] which is greater than {maximumAcceptableMetricValues.Continuances}");
                 errorsCount++;
             }
-            if (this.Imperatives2 > 5)
+            if (this.Imperatives2 > maximumAcceptableMetricValues.Imperatives2)
             {
-                errorMessages.AppendLine($"Error: Imperatives2 value is [ {Imperatives2} ] which is greater than 5");
+                errorMessages.AppendLine($"Error: Imperatives2 value is [ {Imperatives2} ] which is greater than {maximumAcceptableMetricValues.Imperatives2}");
                 errorsCount++;
             }
-            if (this.References2 > 4)
+            if (this.References2 > maximumAcceptableMetricValues.References2)
             {
-                errorMessages.AppendLine($"Error: References2 value is [ {References2} ] which is greater than 4");
+                errorMessages.AppendLine($"Error: References2 value is [ {References2} ] which is greater than {maximumAcceptableMetricValues.References2}");
                 errorsCount++;
             }
-            if (this.ARI > 70)
+            if (this.ARI > maximumAcceptableMetricValues.ARI)
             {
-                errorMessages.AppendLine($"Error: ARI value is [ {ARI} ] which is greater than 70");
+                errorMessages.AppendLine($"Error: ARI value is [ {ARI} ] which is greater than {maximumAcceptableMetricValues.ARI}");
                 errorsCount++;
             }
 
             if (errorsCount > 0)
             {
                 errorMessages.Insert(0, errorsCount > 1 ?
-                 $"The requirement's Metrics validation has {errorsCount} errors:" + Environment.NewLine : $"The requirement's Metrics validation has one error:" + Environment.NewLine);
+                 $"The requirement's metrics validation has {errorsCount} errors:" + Environment.NewLine : $"The requirement's metrics validation has one error:" + Environment.NewLine);
                 this.ErrorMessage = errorMessages.ToString();
             }
 
