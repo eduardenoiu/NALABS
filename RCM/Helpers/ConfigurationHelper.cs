@@ -7,6 +7,11 @@ namespace RCM.Helpers
 {
     public class ConfigurationHelper
     {
+        /// <summary>
+        /// Method to get an app setting string value by a key.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static string GetAppSetting(string key)
         {
             // Check if the key exists in appSettings
@@ -22,7 +27,11 @@ namespace RCM.Helpers
             return value;
         }
 
-        //Method to get an integer value from appSettings
+        /// <summary>
+        /// Method to get an integer value from appSettings
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public static int GetAppSettingInt(string key)
         {
             string value = ConfigurationManager.AppSettings[key];
@@ -43,9 +52,16 @@ namespace RCM.Helpers
             return result;
         }
 
+        /// <summary>
+        /// Retrieves the maximum acceptable metric values for NALABS from the application's app.config file.
+        /// These values define threshold limits for various software requirement quality metrics.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="MaximumAcceptableMetricValues"/> object containing the configured threshold values.
+        /// </returns>
         public static MaximumAcceptableMetricValues GetMaximumAcceptableMetricValues()
         {
-            // Get the custom MetricStandardValue section from the configuration
+            // Get the custom MaximumAcceptableMetricValue section from the configuration
             var section = ConfigurationManager.GetSection("MaximumAcceptableMetricValue") as System.Collections.Specialized.NameValueCollection;
 
             // Create an instance of the class to hold the values
@@ -54,7 +70,7 @@ namespace RCM.Helpers
             if (section == null)
             {
                 return values;
-                //throw new ConfigurationErrorsException("MetricStandardValue section not found.");
+                //throw new ConfigurationErrorsException("MaximumAcceptableMetricValue section not found.");
             }
 
             // Map the values from the section to the class properties
