@@ -176,7 +176,7 @@ namespace RCM
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     var filePath = Directory.GetCurrentDirectory();
-                    dt.ToJson(Path.Combine(filePath, "rcm_output.json"));
+                    dt.ToJson(Path.Combine(filePath, "nalabs_output.json"));
                 }
             }
             catch (Exception ex)
