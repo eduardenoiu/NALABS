@@ -28,7 +28,7 @@ namespace RCM
             get { return idCol; }
             set { idCol = value; }
         }
-        int textCol = 6;
+        int textCol = 2;
 
         public int TextCol
         {
