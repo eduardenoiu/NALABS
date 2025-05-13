@@ -34,7 +34,17 @@ namespace RCM.Settings
 
         public string FilePath
         {
-            get { return Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + "\\Settings\\Settings.xml"; }
+            get
+            {
+                if (Environment.GetEnvironmentVariable("CI") == "true")
+                {
+                    return System.Configuration.ConfigurationManager.AppSettings["CISettingsPath"];
+                }
+                else
+                {
+                    return Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + "\\Settings\\Settings.xml";
+                }
+            }
             set { }
         }
 
