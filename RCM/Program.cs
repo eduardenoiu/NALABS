@@ -85,7 +85,7 @@ namespace RCM
             }
             catch (Exception ex)
             {
-                File.WriteAllText("rcm_log.txt", ex.Message);
+                File.WriteAllText("nalabs_log.txt", ex.Message);
             }
         }
 
