@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Input;
-using System.Threading;
 using System.IO;
 using RCM.Settings;
 using RCM.Metrics;
@@ -19,8 +14,17 @@ namespace RCM
         [System.STAThreadAttribute()]
         static void Main(string[] args)
         {
-            RunProgram();
+            if (Environment.GetEnvironmentVariable("CI") == "true")
+            {
+                // Run logic that doesn't require UI rendering
+                InitSettings();
+            }
+            else
+            {
+                RunProgram();
+            }
         }
+
         static void RunProgram()
         {
             app = new Application();
@@ -63,6 +67,7 @@ namespace RCM
             mSplash.Dispatcher.Invoke(new Action(mSplash.Close));
            // Mouse.OverrideCursor = prev;
         }
+
         static void InitSettings()
         {
             try
@@ -93,6 +98,7 @@ namespace RCM
         {
             mSplash.UpdateStatus("Reading requirements...", 20);
         }
+
         static void LoadingMetrics(object sender, EventArgs e)
         {
             mSplash.UpdateStatus("Loading Metrics...", 20);
