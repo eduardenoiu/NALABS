@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Reflection;
-using Newtonsoft.Json;
 
 namespace RCM.Extensions
 {
@@ -26,8 +26,14 @@ namespace RCM.Extensions
 
             var json = JsonConvert.SerializeObject(new { Rows = lst.ToArray(), Formatting.Indented });
 
-            Console.Write(json);
-            File.WriteAllText(filePath, json);
+            if (Environment.GetEnvironmentVariable("CI") == "true")
+            {
+                Console.Write(json);
+            }
+            else
+            {
+                File.WriteAllText(filePath, json);
+            }
         }
 
         public static System.Data.DataTable ToDataTable<T>(this List<T> items)
