@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
 using System.Data;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Input;
-using RCM.Settings;
-using System.Reflection;
 using RCM.Extensions;
 using ClosedXML.Excel;
 
@@ -85,6 +78,8 @@ namespace RCM
 
         public void Read(string path)
         {
+            File.AppendAllText("nalabs_log.txt", DateTime.Now + "The req path: " + path + Environment.NewLine);
+
             Invoke(ReadingExcelData);
             if (!File.Exists(FilePath))
             {
