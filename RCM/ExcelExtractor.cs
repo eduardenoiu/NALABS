@@ -78,8 +78,6 @@ namespace RCM
 
         public void Read(string path)
         {
-            File.AppendAllText("nalabs_log.txt", DateTime.Now + "The req path: " + path + Environment.NewLine);
-
             Invoke(ReadingExcelData);
             if (!File.Exists(FilePath))
             {
