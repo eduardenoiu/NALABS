@@ -3,6 +3,7 @@ using System.Windows;
 using System.IO;
 using RCM.Settings;
 using RCM.Metrics;
+using RCM.Helpers;
 
 namespace RCM
 {
@@ -14,7 +15,8 @@ namespace RCM
         [System.STAThreadAttribute()]
         static void Main(string[] args)
         {
-            if (Environment.GetEnvironmentVariable("CI") == "true")
+            // This helps identify if the application is currently running in a CI context.
+            if (Environment.GetEnvironmentVariable("CI") == "true" || ConfigurationHelper.IsCI)
             {
                 // Run logic that doesn't require UI rendering
                 InitSettings();

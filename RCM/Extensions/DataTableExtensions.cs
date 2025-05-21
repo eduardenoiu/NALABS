@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using RCM.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -26,7 +27,7 @@ namespace RCM.Extensions
 
             var json = JsonConvert.SerializeObject(new { Rows = lst.ToArray(), Formatting.Indented });
 
-            if (Environment.GetEnvironmentVariable("CI") == "true")
+            if (Environment.GetEnvironmentVariable("CI") == "true" || ConfigurationHelper.IsCI)
             {
                 Console.Write(json);
             }

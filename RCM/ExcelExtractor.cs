@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using RCM.Extensions;
 using ClosedXML.Excel;
+using RCM.Helpers;
 
 namespace RCM
 {
@@ -35,7 +36,7 @@ namespace RCM
         {
             get
             {
-                if (Environment.GetEnvironmentVariable("CI") == "true")
+                if (Environment.GetEnvironmentVariable("CI") == "true" || ConfigurationHelper.IsCI)
                 {
                     return System.Configuration.ConfigurationManager.AppSettings["CIFunctionalReqFilePath"];
                 }

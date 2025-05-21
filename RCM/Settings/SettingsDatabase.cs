@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.IO;
 using Microsoft;
-
+using RCM.Helpers;
 
 namespace RCM.Settings
 {
@@ -36,7 +36,7 @@ namespace RCM.Settings
         {
             get
             {
-                if (Environment.GetEnvironmentVariable("CI") == "true")
+                if (Environment.GetEnvironmentVariable("CI") == "true" || ConfigurationHelper.IsCI)
                 {
                     return System.Configuration.ConfigurationManager.AppSettings["CISettingsPath"];
                 }
