@@ -52,6 +52,20 @@ namespace RCM.Helpers
             return result;
         }
 
+
+        /// <summary>
+        /// Returns true if the Environment app setting is set to "dev".
+        /// </summary>
+        public static bool IsDevelopment =>
+            string.Equals(GetAppSetting("Environment"), "dev", System.StringComparison.OrdinalIgnoreCase);
+
+        /// <summary>
+        /// Returns true if the Environment app setting is set to "ci".
+        /// </summary>
+        public static bool IsCI =>
+            string.Equals(GetAppSetting("Environment"), "ci", System.StringComparison.OrdinalIgnoreCase);
+
+
         /// <summary>
         /// Retrieves the maximum acceptable metric values for NALABS from the application's app.config file.
         /// These values define threshold limits for various software requirement quality metrics.
