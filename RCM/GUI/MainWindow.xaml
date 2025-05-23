@@ -68,7 +68,17 @@
                 <DataGridTextColumn  Header="Continuances" TextElement.Foreground="Crimson"   IsReadOnly="True" Width="auto" Binding="{Binding Continuances,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, BindsDirectlyToSource=True}"></DataGridTextColumn>
                 <DataGridTextColumn  Header="ARI" IsReadOnly="True" Width="60" Binding="{Binding ARI, StringFormat=N2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, BindsDirectlyToSource=True}"></DataGridTextColumn>
                 <DataGridTextColumn  Header="Status" IsReadOnly="True" Width="60" Binding="{Binding Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, BindsDirectlyToSource=True}"></DataGridTextColumn>
-                <DataGridTextColumn  Header="ErrorMessage" IsReadOnly="True" Width="*" Binding="{Binding ErrorMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, BindsDirectlyToSource=True}"></DataGridTextColumn>
+                <DataGridTemplateColumn  Header="Error Message" Width="*" MinWidth="200" IsReadOnly="True"   >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate >
+                            <TextBlock Text="{Binding ErrorMessage}"
+                                             TextWrapping="Wrap" 
+                                             VerticalAlignment="Top" 
+                                             HorizontalAlignment="Left"
+                                             MaxWidth="{Binding RelativeSource={RelativeSource AncestorType=DataGridCell}, Path=ActualWidth}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         <!--<FlowDocumentReader Name="Requirements" Grid.Row="1">            
