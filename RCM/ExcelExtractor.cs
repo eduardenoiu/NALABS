@@ -80,9 +80,14 @@ namespace RCM
         public void Read(string path)
         {
             Invoke(ReadingExcelData);
-            if (!File.Exists(FilePath))
+            if (!File.Exists(path))
             {
-                MessageBox.Show("File not found!");
+                MessageBox.Show(
+                  "Requirements file not found. Please ensure 'FunctionalReq.xlsx' is present in the expected directory.",
+                  "File Not Found",
+                  MessageBoxButton.OK,
+                  MessageBoxImage.Warning);
+
                 return;
             }
 
@@ -90,7 +95,7 @@ namespace RCM
             {
                 System.Data.DataTable dataTable;
 
-                using (var excelWorkbook = new XLWorkbook(filePath))
+                using (var excelWorkbook = new XLWorkbook(path))
                 {
                     var worksheet = excelWorkbook.Worksheet(1);
                     if (worksheet == null)
