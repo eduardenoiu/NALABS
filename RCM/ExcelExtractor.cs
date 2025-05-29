@@ -125,17 +125,29 @@ namespace RCM
                         }
                         else
                         {
-                            // Adding a Row in datatable
-                            dataTable.Rows.Add();
-
+                            // Add new row to the datatable
+                            var newRow = dataTable.NewRow();
                             int cellIndex = 0;
-                           
-                            // Updating the values of datatable
+
                             foreach (IXLCell cell in row.Cells(readRange))
                             {
-                                dataTable.Rows[dataTable.Rows.Count - 1][cellIndex] = cell.Value.ToString();
+                                string cellContent;
+
+                                if (cell.HasFormula)
+                                {
+                                    // Try to get the cached value
+                                    cellContent = cell.CachedValue?.ToString() ?? string.Empty;
+                                }
+                                else
+                                {
+                                    cellContent = cell.GetValue<string>();
+                                }
+
+                                newRow[cellIndex] = cellContent;
                                 cellIndex++;
                             }
+
+                            dataTable.Rows.Add(newRow);
                         }
                     }
                 }
