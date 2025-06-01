@@ -10,7 +10,7 @@ namespace RCM.Helpers
 
         public static void LogError(Exception ex, string context = null)
         {
-            Log("ERROR", ex.Message, context, ex.StackTrace);
+            Log("ERROR", ex.Message, context, ex.GetType().Name, ex.StackTrace);
         }
 
         public static void LogWarning(string message, string context = null)
@@ -23,12 +23,15 @@ namespace RCM.Helpers
             Log("INFO", message, context);
         }
 
-        private static void Log(string level, string message, string context, string stackTrace = null)
+        private static void Log(string level, string message, string context, string errorType = null, string stackTrace = null)
         {
             try
             {
                 var content = new StringBuilder();
                 content.AppendLine($"[{level}] [{DateTime.Now:yyyy-MM-dd HH:mm:ss}] Message: {message}");
+                if (!string.IsNullOrEmpty(errorType))
+                    content.AppendLine($"  ExceptionType: {errorType}");
+                
                 if (!string.IsNullOrEmpty(context))
                    content.AppendLine($"  Context: {context}");
 
