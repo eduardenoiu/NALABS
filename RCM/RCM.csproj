@@ -82,6 +82,9 @@
       <DependentUpon>Chart.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ConfigurationHelper.cs" />
+    <Compile Include="Helpers\EnvironmentContext.cs" />
+    <Compile Include="Helpers\MessageHelper.cs" />
+    <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Metrics\ConjunctionMetric.cs" />
     <Compile Include="ExcelExtractor.cs" />
     <Compile Include="Metrics\ContinuancesMetric.cs" />
