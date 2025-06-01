@@ -26,7 +26,7 @@ namespace RCM.Helpers
         public static string MachineName => Environment.MachineName;
 
         /// <summary>
-        /// Determines if running in interactive mode (not a service or CI pipeline).
+        /// Determines if running in interactive mode (not a CI pipeline).
         /// </summary>
         public static bool IsInteractive => Environment.UserInteractive;
     }
