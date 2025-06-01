@@ -36,7 +36,7 @@ namespace RCM.Settings
         {
             get
             {
-                if (Environment.GetEnvironmentVariable("CI") == "true" || ConfigurationHelper.IsCI)
+                if (EnvironmentContext.IsCI)
                 {
                     return System.Configuration.ConfigurationManager.AppSettings["CISettingsPath"];
                 }
@@ -145,9 +145,11 @@ namespace RCM.Settings
                         s.ReadXml(FilePath);
                         return s;
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        System.Windows.MessageBox.Show("Failed to read XML file " + FilePath);
+                        var message = "Failed to read XML file " + FilePath;
+                        Logger.LogError(ex, message);
+                        MessageHelper.ShowWarning(ex, message, "XMLReader");
                     }
                 }
                 return null;

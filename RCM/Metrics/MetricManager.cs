@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.ComponentModel.Composition.Hosting;
 using System.Threading.Tasks;
+using RCM.Helpers;
 
 namespace RCM.Metrics
 {
@@ -68,18 +69,23 @@ namespace RCM.Metrics
 
                 container = new CompositionContainer(aggCatalog);
             }
-            catch
+            catch (Exception ex)
             {
-
+                var message = "Faild to get composition container.";
+                Logger.LogError(ex, message);
+                MessageHelper.ShowWarning(ex, message, "MetricManager");
             }
+
             List<Metric<IMetric>> metrics = new List<Metric<IMetric>>();
             try
             {
                 metrics=container.GetExports<IMetric, IMetricInfo>().ToList().ConvertAll<Metric<IMetric>>(n=>new Metric<IMetric>(n));
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(e.Message, "MetricManager", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);    
+                var message = "Faild to get metrics.";
+                Logger.LogError(ex, message);
+                MessageHelper.ShowWarning(ex, message, "MetricManager");
             }
 
             AllMetrics = RemoveDuplets(metrics);

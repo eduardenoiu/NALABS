@@ -1,13 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.IO;
-using System.Data;
+﻿using ClosedXML.Excel;
+using RCM.Extensions;
+using RCM.Helpers;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
+using System.Data;
+using System.IO;
+using System.Linq;
 using System.Windows;
-using RCM.Extensions;
-using ClosedXML.Excel;
-using RCM.Helpers;
 
 namespace RCM
 {
@@ -36,7 +36,7 @@ namespace RCM
         {
             get
             {
-                if (Environment.GetEnvironmentVariable("CI") == "true" || ConfigurationHelper.IsCI)
+                if (EnvironmentContext.IsCI)
                 {
                     return System.Configuration.ConfigurationManager.AppSettings["CIFunctionalReqFilePath"];
                 }
@@ -58,7 +58,9 @@ namespace RCM
         public ExcelExtractor()
         {
             if (FilePath != null)
+            {
                 Read(FilePath);
+            }
         }
 
         private static ExcelExtractor mInstance;
@@ -82,11 +84,10 @@ namespace RCM
             Invoke(ReadingExcelData);
             if (!File.Exists(path))
             {
-                MessageBox.Show(
-                  "Requirements file not found. Please ensure 'FunctionalReq.xlsx' is present in the expected directory.",
-                  "File Not Found",
-                  MessageBoxButton.OK,
-                  MessageBoxImage.Warning);
+                var errorMessage = "The requirements file 'FunctionalReq.xlsx' was not found. Please ensure it exists in the expected directory.";
+
+                Logger.LogWarning(errorMessage, "ExcelExtractor");
+                MessageHelper.ShowWarning(errorMessage, "File Not Found");
 
                 return;
             }
@@ -100,7 +101,10 @@ namespace RCM
                     var worksheet = excelWorkbook.Worksheet(1);
                     if (worksheet == null)
                     {
-                        MessageBox.Show("No worksheet found in the Excel file.");
+                        var errorMessage = "No worksheet found in the requirements excel file.";
+                        Logger.LogWarning(errorMessage, "ExcelExtractor");
+                        MessageHelper.Show(errorMessage);
+
                         return;
                     }
 
@@ -152,6 +156,13 @@ namespace RCM
                     }
                 }
 
+                if (dataTable.Rows.Count == 0)
+                {
+                    var message = "The requirements document is empty!";
+                    Logger.LogWarning(message);
+                    MessageHelper.ShowWarning(message, "Warning");
+                }
+
                 Invoke(ExcelDataReceived);
 
                 int j = 0;
@@ -175,7 +186,11 @@ namespace RCM
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            var message = "Faild to parse the requirements document";
+                            Logger.LogError(ex, message);
+                            MessageHelper.ShowWarning(ex, message, "Warning");
+
+                            return;
                         }
                     };
                 }
@@ -192,7 +207,9 @@ namespace RCM
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading Excel file: {ex.Message}");
+                var message = "Faild to load the Excel file.";
+                Logger.LogError(ex, message);
+                MessageHelper.ShowWarning(ex, message, "ExcelExtractor");
             }
         }
 

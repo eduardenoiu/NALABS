@@ -27,7 +27,7 @@ namespace RCM.Extensions
 
             var json = JsonConvert.SerializeObject(new { Rows = lst.ToArray(), Formatting.Indented });
 
-            if (Environment.GetEnvironmentVariable("CI") == "true" || ConfigurationHelper.IsCI)
+            if (EnvironmentContext.IsCI)
             {
                 Console.Write(json);
             }

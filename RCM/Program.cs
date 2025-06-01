@@ -16,7 +16,7 @@ namespace RCM
         static void Main(string[] args)
         {
             // This helps identify if the application is currently running in a CI context.
-            if (Environment.GetEnvironmentVariable("CI") == "true" || ConfigurationHelper.IsCI)
+            if (EnvironmentContext.IsCI)
             {
                 // Run logic that doesn't require UI rendering
                 InitSettings();
