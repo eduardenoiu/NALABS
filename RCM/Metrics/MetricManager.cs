@@ -73,7 +73,7 @@ namespace RCM.Metrics
             {
                 var message = "Faild to get composition container.";
                 Logger.LogError(ex, message);
-                MessageHelper.ShowWarning(ex, message, "MetricManager");
+                MessageHelper.ShowWarning(message, "MetricManager");
             }
 
             List<Metric<IMetric>> metrics = new List<Metric<IMetric>>();
@@ -85,7 +85,7 @@ namespace RCM.Metrics
             {
                 var message = "Faild to get metrics.";
                 Logger.LogError(ex, message);
-                MessageHelper.ShowWarning(ex, message, "MetricManager");
+                MessageHelper.ShowWarning(message, "MetricManager");
             }
 
             AllMetrics = RemoveDuplets(metrics);

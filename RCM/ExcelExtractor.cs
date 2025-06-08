@@ -188,7 +188,7 @@ namespace RCM
                         {
                             var message = "Faild to parse the requirements document";
                             Logger.LogError(ex, message);
-                            MessageHelper.ShowWarning(ex, message, "Warning");
+                            MessageHelper.ShowWarning(message, "Warning");
 
                             return;
                         }
@@ -209,7 +209,7 @@ namespace RCM
             {
                 var message = "Faild to load the Excel file.";
                 Logger.LogError(ex, message);
-                MessageHelper.ShowWarning(ex, message, "ExcelExtractor");
+                MessageHelper.ShowWarning(message, "ExcelExtractor");
             }
         }
 

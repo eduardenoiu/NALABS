@@ -149,7 +149,7 @@ namespace RCM.Settings
                     {
                         var message = "Failed to read XML file " + FilePath;
                         Logger.LogError(ex, message);
-                        MessageHelper.ShowWarning(ex, message, "XMLReader");
+                        MessageHelper.ShowWarning(message, "XMLReader");
                     }
                 }
                 return null;

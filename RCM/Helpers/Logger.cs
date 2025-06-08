@@ -38,7 +38,14 @@ namespace RCM.Helpers
                 if (!string.IsNullOrEmpty(stackTrace))
                     content.AppendLine($"  StackTrace: {stackTrace}");
 
-                File.AppendAllText(filePath, content.ToString());
+                if (EnvironmentContext.IsCI)
+                {
+                    Console.Error.WriteLine(content.ToString());
+                }
+                else
+                {
+                    File.AppendAllText(filePath, content.ToString());
+                }
             }
             catch
             {

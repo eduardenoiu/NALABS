@@ -39,7 +39,7 @@ namespace RCM.Settings
                 {
                     var message = "Faild to get keywords from metrics.";
                     Logger.LogError(ex, message);
-                    MessageHelper.ShowWarning(ex, message, "Settings");
+                    MessageHelper.ShowWarning(message, "Settings");
                 }
 
                 try
@@ -57,7 +57,7 @@ namespace RCM.Settings
                 {
                     var message = "Faild to populate data table from excel file.";
                     Logger.LogError(ex, message);
-                    MessageHelper.ShowWarning(ex, message, "Settings");
+                    MessageHelper.ShowWarning(message, "Settings");
                 }
             }
         }
