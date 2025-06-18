@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Threading;
 using RCM.Metrics;
+using RCM.Helpers;
 
 namespace RCM
 {
@@ -147,6 +148,8 @@ namespace RCM
                     wordsum += s.Length;
                 }
                 this.ARI = sum / this.Sentences.Length + 9 * (wordsum / this.Words.Count());
+                this.Status = ValidateAllMetrics();
+
                 NotifyPropertyChanged("Text");
                 NotifyPropertyChanged("WordNumber");
                 NotifyPropertyChanged("Conjunctions");
@@ -156,6 +159,8 @@ namespace RCM
                 NotifyPropertyChanged("References");
                 NotifyPropertyChanged("Weakness");
                 NotifyPropertyChanged("ARI");
+                NotifyPropertyChanged("Status");
+                NotifyPropertyChanged("ErrorMessage");
             }
         }
 
@@ -173,6 +178,8 @@ namespace RCM
         public int Continuances { get; set; }
         public int Imperatives2 { get; set; }
         public int References2 { get; set; }
+        public string Status { get; set; }
+        public string ErrorMessage { get; set; }
 
         public Requirement(string id, string text)
         {
@@ -207,6 +214,75 @@ namespace RCM
         {
             if (PropertyChanged != null)
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName)); //  .Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private string ValidateAllMetrics()
+        {
+            int errorsCount = 0;
+            this.ErrorMessage = "-";
+            var exceedMessage = "which exceeds the predefined acceptable metric value of";
+            var errorMessages = new StringBuilder();
+
+            var maximumAcceptableMetricValues = ConfigurationHelper.GetMaximumAcceptableMetricValues();
+            if (this.Conjunctions > maximumAcceptableMetricValues.Conjunctions)
+            {
+                errorMessages.AppendLine($"Conjunctions value is [ {Conjunctions} ] {exceedMessage} [{maximumAcceptableMetricValues.Conjunctions}].");
+                errorsCount++;
+            }
+            if (this.VaguePhrases > maximumAcceptableMetricValues.VaguePhrases)
+            {
+                errorMessages.AppendLine($"VaguePhrases value is [ {VaguePhrases} ] {exceedMessage} [{maximumAcceptableMetricValues.VaguePhrases}].");
+                errorsCount++;
+            }
+            if (this.Optionality > maximumAcceptableMetricValues.Optionality)
+            {
+                errorMessages.AppendLine($"Optionality value is [ {Optionality} ] {exceedMessage} [{maximumAcceptableMetricValues.Optionality}].");
+                errorsCount++;
+            }
+            if (this.Subjectivity > maximumAcceptableMetricValues.Subjectivity)
+            {
+                errorMessages.AppendLine($"Subjectivity value is [ {Subjectivity} ] {exceedMessage} [{maximumAcceptableMetricValues.Subjectivity}].");
+                errorsCount++;
+            }
+            if (this.References > maximumAcceptableMetricValues.References)
+            {
+                errorMessages.AppendLine($"References value is [ {References} ] {exceedMessage} [{maximumAcceptableMetricValues.References}].");
+                errorsCount++;
+            }
+            if (this.Weakness > maximumAcceptableMetricValues.Weakness)
+            {
+                errorMessages.AppendLine($"Weakness value is [ {Weakness} ] {exceedMessage} [{maximumAcceptableMetricValues.Weakness}].");
+                errorsCount++;
+            }
+            if (this.Imperatives > maximumAcceptableMetricValues.Imperatives)
+            {
+                errorMessages.AppendLine($"Imperatives value is [ {Imperatives} ] {exceedMessage} [{maximumAcceptableMetricValues.Imperatives}].");
+                errorsCount++;
+            }
+            if (this.Continuances > maximumAcceptableMetricValues.Continuances)
+            {
+                errorMessages.AppendLine($"Continuances value is [ {Continuances} ] {exceedMessage} [{maximumAcceptableMetricValues.Continuances}].");
+                errorsCount++;
+            }
+            if (this.Imperatives2 > maximumAcceptableMetricValues.Imperatives2)
+            {
+                errorMessages.AppendLine($"Imperatives2 value is [ {Imperatives2} ] {exceedMessage} [{maximumAcceptableMetricValues.Imperatives2}].");
+                errorsCount++;
+            }
+            if (this.References2 > maximumAcceptableMetricValues.References2)
+            {
+                errorMessages.AppendLine($"References2 value is [ {References2} ] {exceedMessage} [{maximumAcceptableMetricValues.References2}].");
+                errorsCount++;
+            }
+            if (this.ARI > maximumAcceptableMetricValues.ARI)
+            {
+                errorMessages.AppendLine($"ARI value is [ {ARI} ] {exceedMessage} [{maximumAcceptableMetricValues.ARI}].");
+                errorsCount++;
+            }
+
+            this.ErrorMessage = errorMessages.ToString();
+
+            return errorsCount > 0 ? "Failed" : "Passed";
         }
     }
 }

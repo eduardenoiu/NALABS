@@ -5,6 +5,8 @@ using System.Text;
 using System.Data;
 using RCM.Metrics;
 using System.IO;
+using RCM.Helpers;
+
 namespace RCM.Settings
 {
     class Settings
@@ -33,20 +35,31 @@ namespace RCM.Settings
                         }
                     }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    var message = "Faild to get keywords from metrics.";
+                    Logger.LogError(ex, message);
+                    MessageHelper.ShowWarning(message, "Settings");
+                }
+
                 try
                 {
-                    DataTable ex = SettingsDatabase.Instance.GetTable("ExcelExtractor");
-                    if (ex != null)
+                    DataTable dt = SettingsDatabase.Instance.GetTable("ExcelExtractor");
+                    if (dt != null)
                     {
-                        ExcelExtractor.Instance.IdCol = Convert.ToInt32(ex.Rows[0]["ID"].ToString());
-                        ExcelExtractor.Instance.TextCol = Convert.ToInt32(ex.Rows[0]["Text"].ToString());
-                        ExcelExtractor.Instance.FilePath = ex.Rows[0]["Path"].ToString();
+                        ExcelExtractor.Instance.IdCol = Convert.ToInt32(dt.Rows[0]["ID"].ToString());
+                        ExcelExtractor.Instance.TextCol = Convert.ToInt32(dt.Rows[0]["Text"].ToString());
+                        ExcelExtractor.Instance.FilePath = dt.Rows[0]["Path"].ToString();
                     }
                     ExcelExtractor.Instance.Read(ExcelExtractor.Instance.FilePath);
                 }
-                catch { }                
-            }         
+                catch (Exception ex)
+                {
+                    var message = "Faild to populate data table from excel file.";
+                    Logger.LogError(ex, message);
+                    MessageHelper.ShowWarning(message, "Settings");
+                }
+            }
         }
 
         public static void SaveSettings()
@@ -75,7 +88,7 @@ namespace RCM.Settings
             DataRow r = ex.NewRow();
             r["ID"] = ExcelExtractor.Instance.IdCol;
             r["Text"] = ExcelExtractor.Instance.TextCol;
-            r["Path"] = ExcelExtractor.Instance.FilePath;
+            r["Path"] = ExcelExtractor.Instance.FilePath ?? ExcelExtractor.Instance.DefaultFilePath;
             ex.Rows.Add(r);
             Data.AllData.Tables.Add(ex);
             Data.Save();

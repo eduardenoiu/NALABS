@@ -19,9 +19,10 @@ using System.Collections.ObjectModel;
 using Microsoft.Win32;
 using System.IO;
 using System.Web.UI;
-using System.Data;
 using System.Text.RegularExpressions;
 using RCM.Metrics;
+using RCM.Helpers;
+
 namespace RCM
 {
     /// <summary>
@@ -156,7 +157,8 @@ namespace RCM
             }
             else
             {
-                MessageBox.Show("No requirements found!", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var message = "No requirements found!";
+                MessageBox.Show(message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 

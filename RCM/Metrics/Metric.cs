@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RCM.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,7 +43,9 @@ namespace RCM.Metrics
                     {
                         HasFailedInitializing = true;
                         mInstance = default(T);
-                        System.Windows.MessageBox.Show("Failed to load metric " + Info.Name + "\n" + ex.Message, "MetricManager", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Warning);
+                        var errorMessage = "Failed to load metric " + Info.Name + "\n" + ex.Message;
+                        Logger.LogError(ex, errorMessage);
+                        MessageHelper.ShowWarning(errorMessage, "MetricManager");
                     }
                 }
                 return mInstance;

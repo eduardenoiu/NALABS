@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Input;
-using System.Threading;
+using System.IO;
+using RCM.Settings;
+using RCM.Metrics;
+using RCM.Helpers;
 
 namespace RCM
 {
@@ -16,8 +15,18 @@ namespace RCM
         [System.STAThreadAttribute()]
         static void Main(string[] args)
         {
-            RunProgram();
+            // This helps identify if the application is currently running in a CI context.
+            if (EnvironmentContext.IsCI)
+            {
+                // Run logic that doesn't require UI rendering
+                InitSettings();
+            }
+            else
+            {
+                RunProgram();
+            }
         }
+
         static void RunProgram()
         {
             app = new Application();
@@ -53,10 +62,33 @@ namespace RCM
             //Cursor prev = Mouse.OverrideCursor;
             //Mouse.OverrideCursor = Cursors.Wait;
             mSplash.UpdateStatus("Reading Settings...", 20);
-            Settings.Settings.Init();
+
+            InitSettings();
+
             mSplash.UpdateStatus("Reading Settings done", 20);
             mSplash.Dispatcher.Invoke(new Action(mSplash.Close));
            // Mouse.OverrideCursor = prev;
+        }
+
+        static void InitSettings()
+        {
+            try
+            {
+                if (!File.Exists(SettingsDatabase.Instance.FilePath))
+                {
+                    Settings.Settings.Init();
+                    MetricManager.SetMetricKeywords();
+
+                    Settings.Settings.SaveSettings();
+                }
+
+                if (File.Exists(SettingsDatabase.Instance.FilePath))
+                    Settings.Settings.Init();
+            }
+            catch (Exception ex)
+            {
+                File.WriteAllText("nalabs_log.txt", ex.Message);
+            }
         }
 
         static void Instance_ExcelDataReceived(object sender, EventArgs e)
@@ -68,6 +100,7 @@ namespace RCM
         {
             mSplash.UpdateStatus("Reading requirements...", 20);
         }
+
         static void LoadingMetrics(object sender, EventArgs e)
         {
             mSplash.UpdateStatus("Loading Metrics...", 20);

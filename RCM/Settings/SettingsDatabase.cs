@@ -6,7 +6,7 @@ using System.Data;
 using System.Text;
 using System.IO;
 using Microsoft;
-
+using RCM.Helpers;
 
 namespace RCM.Settings
 {
@@ -34,7 +34,17 @@ namespace RCM.Settings
 
         public string FilePath
         {
-            get { return Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + "\\Settings\\Settings.xml"; }
+            get
+            {
+                if (EnvironmentContext.IsCI)
+                {
+                    return System.Configuration.ConfigurationManager.AppSettings["CISettingsPath"];
+                }
+                else
+                {
+                    return Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + "\\Settings\\Settings.xml";
+                }
+            }
             set { }
         }
 
@@ -135,9 +145,11 @@ namespace RCM.Settings
                         s.ReadXml(FilePath);
                         return s;
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        System.Windows.MessageBox.Show("Failed to read XML file " + FilePath);
+                        var message = "Failed to read XML file " + FilePath;
+                        Logger.LogError(ex, message);
+                        MessageHelper.ShowWarning(message, "XMLReader");
                     }
                 }
                 return null;
